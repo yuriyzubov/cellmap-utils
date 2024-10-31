@@ -6,8 +6,8 @@ def upsert_record_scene_tables(scene_table : api.table.Table,
                                scene_to_image_table : api.table.Table,
                                image_table : api.table.Table,
                                image_location : str,
-                               scene_update : dict = {},
-                               scene_to_image_update: dict = {}
+                               scene_data : dict = {},
+                               scene_to_image_data: dict = {}
                                ) -> Tuple[dict]:
     """This method upserts records into scene and scene_to_image table at the same time.
 
@@ -38,7 +38,7 @@ def upsert_record_scene_tables(scene_table : api.table.Table,
                                 'contrast_stop': 255,
                                     'color': 'white'}
     # update if input data for an upsert record exists
-    scene_to_image_insert = {key: scene_to_image_update.get(key, val) for key, val in scene_to_image_insert.items()}
+    scene_to_image_insert = {key: scene_to_image_data.get(key, val) for key, val in scene_to_image_insert.items()}
 
     
     location = image_airt['fields']['location']
@@ -65,7 +65,7 @@ def upsert_record_scene_tables(scene_table : api.table.Table,
                                             'crossection_scale': 10.0,
                                             'projection_scale' : 1000.0}
     # update if input data for an upsert record exists
-    scene_insert = {key: scene_update.get(key, val) for key, val in scene_insert.items()}
+    scene_insert = {key: scene_data.get(key, val) for key, val in scene_insert.items()}
 
     
     if existing_record_scene == None:

@@ -13,7 +13,7 @@
 ## Installation
 
 ```console
-pip install cellmap-airt-utils
+pip install cellmap-utils
 ```
 
 ## License

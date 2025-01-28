@@ -1,4 +1,4 @@
-# cellmap-airt-utils
+# cellmap-utils
 
 [![PyPI - Version](https://img.shields.io/pypi/v/cellmap-airt-utils.svg)](https://pypi.org/project/cellmap-airt-utils)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cellmap-airt-utils.svg)](https://pypi.org/project/cellmap-airt-utils)

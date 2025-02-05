@@ -129,7 +129,7 @@ def ome_ngff_only(zg : zarr.Group):
     Args:
         zg (zarr.Group): zarr group that contains multiscale metadata.
     """
-    to_keep = ['multiscales', 'cellmap', 'omero']
+    to_keep = ['multiscales', 'cellmap', 'omero', 'bioformats2raw.layout', 'labels', 'well', 'plate']
     to_delete_attrs = [attr for attr in list(zg.attrs) if attr not in to_keep]
     
     for attr_name in to_delete_attrs:

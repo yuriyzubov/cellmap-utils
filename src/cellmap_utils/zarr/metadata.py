@@ -122,3 +122,15 @@ def get_multiscale_metadata(multsc : dict, levels : int):
                     'path': f's{level}'})
 
     return z_attrs
+
+def ome_ngff_only(zg : zarr.Group):
+    """Delete all attrs from .zattrs that are not part of the OME-NGFF Zarr spec and CellMap metadata. 
+
+    Args:
+        zg (zarr.Group): zarr group that contains multiscale metadata.
+    """
+    to_keep = ['multiscales', 'cellmap', 'omero']
+    to_delete_attrs = [attr for attr in list(zg.attrs) if attr not in to_keep]
+    
+    for attr_name in to_delete_attrs:
+        zg.attrs.__delitem__(attr_name)

@@ -1,2 +1,1 @@
-from .image import upsert_image
-from .scene import upsert_record_scene_tables
+from .upsert import upsert_image, upsert_record_scene_tables

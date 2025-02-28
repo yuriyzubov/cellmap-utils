@@ -28,7 +28,7 @@ def access_parent(node : zarr.Group | zarr.Array):
             f"{node.name} is in the root group of the {node.store.path} store."
         )
     else:
-        return zarr.open(store=store_path, path=os.path.split(node_path)[0], mode="r")
+        return zarr.open(store=store_path, path=os.path.split(node_path)[0], mode="a")
 
 def get_file_system(path):
     p = UPath(path)

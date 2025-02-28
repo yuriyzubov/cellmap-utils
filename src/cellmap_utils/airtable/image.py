@@ -3,6 +3,7 @@ from pyairtable import api
 from pyairtable.formulas import match
 from fibsem_tools import read
 import os
+import zarr
 
 # upsert image record
 from typing import Literal
@@ -16,15 +17,22 @@ def upsert_image( image_table : api.table.Table,
                  annotation_table : api.table.Table
                  ):
     
-    existing_records = image_table.all(formula = match({'name' : image_name}))
+    existing_records = image_table.all(formula = match({'name' : image_name, 'location' : image_path.rstrip('/')}))
     
     if image_type == 'human_segmentation':
             value_type = 'label'
     else: 
         value_type = 'scalar'
     
-    zg_path, z_arr_name = os.path.split(image_path.rstrip('/'))
-    zg = read(zg_path)
+    input_zarr = read(image_path.rstrip('/'))
+    if isinstance(input_zarr, zarr.Group):
+        zg = input_zarr
+        z_arr_name = 's0'
+    else:
+        zg_path, z_arr_name = os.path.split(image_path.rstrip('/'))
+        zg = read(zg_path)    
+        
+    
     scale = zg.attrs['multiscales'][0]['datasets'][0]['coordinateTransformations'][0]['scale']
     offset = zg.attrs['multiscales'][0]['datasets'][0]['coordinateTransformations'][1]['translation']
     shape  = zg[z_arr_name].shape
@@ -39,11 +47,9 @@ def upsert_image( image_table : api.table.Table,
     except:
         annotation = []
     
-    print(zg_path)
-    print(z_arr_name)
     record_to_upsert = {    'name' : image_name,
                             'collection' : [collection_table.all(formula = match({'id' : ds_name}))[0]['id']],
-                            'location' : image_path,
+                            'location' : image_path.rstrip('/'),
                             'format' : 'zarr',
                             'image_type' : image_type,
                             'value_type' : value_type,

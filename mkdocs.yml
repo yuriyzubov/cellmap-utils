@@ -1,0 +1,62 @@
+site_name: "cellmap-utils"
+site_url: https://yuriyzubov.github.io/cellmap-utils/
+site_author: Yurii Zubov
+site_description: >-
+  cellmap-utils python package documentation
+
+# Repository
+repo_name: yuriyzubov/cellmap-utils
+repo_url: https://github.com/yuriyzubov/cellmap-utils/
+
+# Copyright
+copyright: Copyright &copy; 2016 - 2025 HHMI / Janelia
+
+theme:
+  name: material
+  palette:
+  # Palette toggle for light mode
+  - scheme: default
+    toggle:
+      icon: material/brightness-7
+      name: Switch to dark mode
+
+  # Palette toggle for dark mode
+  - scheme: slate
+    toggle:
+      icon: material/brightness-4
+      name: Switch to light mode
+
+nav:
+    - About: index.md
+    - Airtable: airtable.md
+    - Zarr: zarr.md
+    - API:
+      - airtable: api/api_airtable.md
+      - zarr: api/api_zarr.md
+
+plugins:
+- mkdocstrings:
+    handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: numpy
+            members_order: source
+            separate_signature: true
+            filters: ["!^_"]
+            docstring_options:
+              ignore_init_summary: true
+            merge_init_into_class: true
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - toc:
+      baselevel: 2
+      toc_depth: 4
+      permalink: "#"

@@ -10,14 +10,13 @@ from typing import Literal
 
 
 def upsert_image(
-    image_table: api.table.Table,
+    at_api: api,
     ds_name: str,
     image_name: str,
     image_path: str,
+    image_title: str,
     image_type: Literal["human_segmentation", "em"],
-    collection_table: api.table.Table,
-    fibsem_table: api.table.Table,
-    annotation_table: api.table.Table,
+    institution : str = "HHMI / Janelia Research Campus"
 ):
     """Upsert a record to airtable image table.
 
@@ -26,6 +25,7 @@ def upsert_image(
         ds_name (str): name of the dataset.
         image_name (str): name of the image to upsert.
         image_path (str): image location.
+        image_title (str): image title on openorganelle.com.
         image_type (Literal[&#39;human_segmentation&#39;, &#39;em&#39;]): image type
         collection_table (api.table.Table): collation airtable object to create references.
         fibsem_table (api.table.Table): fibsem_imaging airtable object to create references.
@@ -34,12 +34,18 @@ def upsert_image(
     Raises:
         ValueError: raise value error if multiple records with the same location and name are found in the image table.
     """
-
+    
+    image_table = at_api.table(os.environ['AIRTABLE_BASE_ID'], os.environ['IMAGE_TABLE_ID'])
+    collection_table = at_api.table(os.environ['AIRTABLE_BASE_ID'], os.environ['COLLECTION_TABLE_ID'])
+    fibsem_table = at_api.table(os.environ['AIRTABLE_BASE_ID'], os.environ['FIBSEM_TABLE_ID'])
+    annotation_table = at_api.table(os.environ['AIRTABLE_BASE_ID'], os.environ['ANNOTATION_TABLE_ID'])
+    institution_table = at_api.table(os.environ['AIRTABLE_BASE_ID'], os.environ['INSTITUTION_TABLE_ID'])
+    
     existing_records = image_table.all(
         formula=match({"name": image_name, "location": image_path.rstrip("/")})
     )
 
-    if image_type == "human_segmentation":
+    if image_type in ["human_segmentation", "ml_segmentation"]:
         value_type = "label"
     else:
         value_type = "scalar"
@@ -77,6 +83,8 @@ def upsert_image(
         "collection": [collection_table.all(formula=match({"id": ds_name}))[0]["id"]],
         "location": image_path.rstrip("/"),
         "format": "zarr",
+        "title" : image_title,
+        "institution" : [institution_table.all(formula=match({"name": institution}))[0]["id"]],
         "image_type": image_type,
         "value_type": value_type,
         "size_x_pix": shape[2],

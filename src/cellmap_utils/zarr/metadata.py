@@ -106,7 +106,30 @@ def get_single_scale_metadata(
 
     return z_attrs
 
-def get_multiscale_metadata(multsc : dict, levels : int):
+def get_multiscale_metadata(
+        voxel_size: list[float],
+        translation: list[float],
+        levels : int,
+        units: str = 'nanometer',
+        axes: list[str] = ['z', 'y', 'x'],
+        name: str = '',
+        ):
+    """Generates a multiscale metadata from specified voxel size, offset and multi-scale pyramid levels. 
+
+    Args:
+        voxel_size (list[float]): physical size of the voxel
+        translation (list[float]): physical translation of the center of the voxel. 
+        levels (int): how many levels are present in the multis-scale pyramid.
+        units (str, optional): Physical units. Defaults to 'nanometer'.
+        axes (list[str], optional): Axis order. Defaults to ['z', 'y', 'x'].
+        name (str, optional): Name of the dataset that would utilize multi-scale metadata. Defaults to ''.
+
+    Returns:
+        _type_: _description_
+    """
+    
+    multsc = get_single_scale_metadata('s0',voxel_size,translation,name,units,axes)
+    
     z_attrs = multsc 
     base_scale = z_attrs['multiscales'][0]['datasets'][0]['coordinateTransformations'][0]['scale']
     base_trans = z_attrs['multiscales'][0]['datasets'][0]['coordinateTransformations'][1]['translation']

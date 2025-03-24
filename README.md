@@ -1,7 +1,10 @@
 # cellmap-utils
 
-[![PyPI - Version](https://img.shields.io/pypi/v/cellmap-airt-utils.svg)](https://pypi.org/project/cellmap-airt-utils)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cellmap-airt-utils.svg)](https://pypi.org/project/cellmap-airt-utils)
+[![PyPI - Version](https://img.shields.io/pypi/v/cellmap-utils.svg)](https://pypi.org/project/cellmap-utils)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cellmap-utils.svg)](https://pypi.org/project/cellmap-utils)
+
+
+[Documentation page](https://yuriyzubov.github.io/cellmap-utils/)
 
 -----
 

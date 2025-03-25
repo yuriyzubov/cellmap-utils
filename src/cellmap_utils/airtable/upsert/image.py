@@ -16,7 +16,7 @@ def upsert_image(
     image_path: str,
     image_title: str,
     image_type: Literal["human_segmentation", "em"],
-    institution : str = "HHMI / Janelia Research Campus"
+    institution: str = "HHMI / Janelia Research Campus",
 ):
     """Upsert a record to airtable image table.
 
@@ -34,13 +34,23 @@ def upsert_image(
     Raises:
         ValueError: raise value error if multiple records with the same location and name are found in the image table.
     """
-    
-    image_table = at_api.table(os.environ['AIRTABLE_BASE_ID'], os.environ['IMAGE_TABLE_ID'])
-    collection_table = at_api.table(os.environ['AIRTABLE_BASE_ID'], os.environ['COLLECTION_TABLE_ID'])
-    fibsem_table = at_api.table(os.environ['AIRTABLE_BASE_ID'], os.environ['FIBSEM_TABLE_ID'])
-    annotation_table = at_api.table(os.environ['AIRTABLE_BASE_ID'], os.environ['ANNOTATION_TABLE_ID'])
-    institution_table = at_api.table(os.environ['AIRTABLE_BASE_ID'], os.environ['INSTITUTION_TABLE_ID'])
-    
+
+    image_table = at_api.table(
+        os.environ["AIRTABLE_BASE_ID"], os.environ["IMAGE_TABLE_ID"]
+    )
+    collection_table = at_api.table(
+        os.environ["AIRTABLE_BASE_ID"], os.environ["COLLECTION_TABLE_ID"]
+    )
+    fibsem_table = at_api.table(
+        os.environ["AIRTABLE_BASE_ID"], os.environ["FIBSEM_TABLE_ID"]
+    )
+    annotation_table = at_api.table(
+        os.environ["AIRTABLE_BASE_ID"], os.environ["ANNOTATION_TABLE_ID"]
+    )
+    institution_table = at_api.table(
+        os.environ["AIRTABLE_BASE_ID"], os.environ["INSTITUTION_TABLE_ID"]
+    )
+
     existing_records = image_table.all(
         formula=match({"name": image_name, "location": image_path.rstrip("/")})
     )
@@ -83,8 +93,10 @@ def upsert_image(
         "collection": [collection_table.all(formula=match({"id": ds_name}))[0]["id"]],
         "location": image_path.rstrip("/"),
         "format": "zarr",
-        "title" : image_title,
-        "institution" : [institution_table.all(formula=match({"name": institution}))[0]["id"]],
+        "title": image_title,
+        "institution": [
+            institution_table.all(formula=match({"name": institution}))[0]["id"]
+        ],
         "image_type": image_type,
         "value_type": value_type,
         "size_x_pix": shape[2],

@@ -17,6 +17,7 @@ def upsert_image(
     image_title: str,
     image_type: Literal["human_segmentation", "em"],
     institution: str = "HHMI / Janelia Research Campus",
+    challenge : bool = False,
 ):
     """Upsert a record to airtable image table.
 
@@ -109,6 +110,7 @@ def upsert_image(
         "offset_y_nm": offset[1],
         "offset_z_nm": offset[0],
         "fibsem_imaging": fibsem_imaging,
+        "challenge" : challenge, 
         "annotation": annotation,
     }
 

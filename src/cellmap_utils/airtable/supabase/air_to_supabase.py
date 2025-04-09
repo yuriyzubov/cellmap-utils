@@ -5,11 +5,11 @@ import os
 from pyairtable.formulas import match
 from datetime import datetime
 
-from pydantic_models import (
+from .pydantic_models import (
     SupaDatasetModel,
     SupaImageAcquisitionModel,
     SupaImageModel,
-    SupaPublicatioModel,
+    SupaPublicationModel,
     SupaSampleModel,
 )
 
@@ -32,11 +32,12 @@ def get_image_record(image_path: str, ds_name: str, at_api: api):
     fibsem_table = at_api.table(
         os.environ["AIRTABLE_BASE_ID"], os.environ["FIBSEM_TABLE_ID"]
     )
+    institution_table = at_api.table(
+        os.environ["AIRTABLE_BASE_ID"], os.environ["INSTITUTION_TABLE_ID"]
+    )
 
-    institution = "HHMI/Janelia"
-    image_record = image_table.all(formula=match({"location": image_path.rstrip("/")}))[
-        0
-    ]
+    image_record = image_table.all(formula=match({"location": image_path.rstrip("/")}))[0]
+    
     name = image_record["fields"]["name"]
     display_settings = {
         "invertLUT": False,
@@ -91,19 +92,20 @@ def get_image_record(image_path: str, ds_name: str, at_api: api):
         sample_type=image_record["fields"]["value_type"],
         content_type=content_type,
         dataset_name=ds_name,
-        institution=institution,
+        institution=institution_table.get( image_record['fields']['institution'][0])['fields']['name'],
         grid_dims=["z", "y", "x"],
         grid_scale=[
             image_record["fields"][f"resolution_{_}_nm"] for _ in ["z", "y", "x"]
         ],
-        grid_translation=[
-            image_record["fields"][f"offset_{_}_nm"] for _ in ["z", "y", "x"]
-        ],
+        grid_translation=[0.0, 0.0, 0.0],
+        # [
+        #     image_record["fields"][f"offset_{_}_nm"] for _ in ["z", "y", "x"]
+        # ],
         grid_units=["nm", "nm", "nm"],
         grid_index_order="C",
         stage="dev",
-        image_stack=f"{name}_{ds_name}",
-        doi={"url": image_record["fields"]["doi_link_dataset"][0], "name": pub_name},
+        image_stack=f"{ds_name}_groundtruth",
+        #doi={"url": image_record["fields"]["doi_link_dataset"][0], "name": pub_name},
     )
 
     return supa_image
@@ -114,12 +116,12 @@ def get_img_acq_record(ds_name: str, at_api: api):
     fibsem_table = at_api.table(
         os.environ["AIRTABLE_BASE_ID"], os.environ["FIBSEM_TABLE_ID"]
     )
-    fibsem_record = fibsem_table.all(formula=match({"name": ds_name}))
+    fibsem_record = fibsem_table.all(formula=match({"name": ds_name}))[0]
 
     sample_table = at_api.table(
         os.environ["AIRTABLE_BASE_ID"], os.environ["SAMPLE_TABLE_ID"]
     )
-    sample_record = sample_table.all(formula=match({"name": ds_name}))
+    #sample_record = sample_table.all(formula=match({"name": ds_name}))[0]
 
     image_table = at_api.table(
         os.environ["AIRTABLE_BASE_ID"], os.environ["IMAGE_TABLE_ID"]
@@ -127,7 +129,7 @@ def get_img_acq_record(ds_name: str, at_api: api):
     image_record = image_table.get(fibsem_record["fields"]["images"][0])
     supa_acquisition = SupaImageAcquisitionModel(
         name=ds_name,
-        institution=sample_record["fields"]["institution"],
+        institution="HHMI/Janelia",#sample_record["fields"]["institution"],
         start_date=fibsem_record["fields"]["start_date"],
         grid_axes=["z", "y", "x"],
         grid_spacing=[
@@ -148,7 +150,7 @@ def get_sample_record(ds_name: str, at_api: api):
     collection_table = at_api.table(
         os.environ["AIRTABLE_BASE_ID"], os.environ["COLLECTION_TABLE_ID"]
     )
-    collection_record = collection_table.all(formula=match({"id": ds_name}))
+    collection_record = collection_table.all(formula=match({"id": ds_name}))[0]
 
     sample_table = at_api.table(
         os.environ["AIRTABLE_BASE_ID"], os.environ["SAMPLE_TABLE_ID"]
@@ -171,13 +173,30 @@ def get_dataset_record(ds_name: str, at_api: api):
     collection_table = at_api.table(
         os.environ["AIRTABLE_BASE_ID"], os.environ["COLLECTION_TABLE_ID"]
     )
-    collection_record = collection_table.all(formula=match({"id": ds_name}))
-
+    sample_table = at_api.table(os.environ["AIRTABLE_BASE_ID"], os.environ["COLLECTION_TABLE_ID"])
+    publication_table = at_api.table(os.environ["AIRTABLE_BASE_ID"], os.environ["PUBLICATION_TABLE_ID"])
+    doi_table = at_api.table(os.environ["AIRTABLE_BASE_ID"], os.environ["DOI_TABLE_ID"])
+    
+    
+    collection_record = collection_table.all(formula=match({"id": ds_name}))[0]
+    sample_record = sample_table.get(collection_record['fields']['sample'][0])
+    
+    pubs = []
+    for doi_id in sample_record['fields']['doi']:
+        doi_record = doi_table.get(doi_id)
+        supa_doi = SupaPublicationModel(
+            name=doi_record['fields']['doi_name'],
+            url = doi_record['fields']['doi_link_dataset'],
+            pub_type = 'doi',
+        )
+        pubs.append(supa_doi)
+    print(pubs)
     supa_dataset = SupaDatasetModel(
         name=ds_name,
         description=collection_record["fields"]["description"],
         thumbnail_url=f"s3://janelia-cosem-datasets/{ds_name}/thumbnail.jpg",
         stage="dev",
+        publications=pubs,
     )
     return supa_dataset
 

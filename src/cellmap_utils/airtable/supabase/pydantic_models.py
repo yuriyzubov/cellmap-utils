@@ -19,7 +19,7 @@ class SupaImageModel(BaseModel):
     grid_index_order: str
     stage: str
     image_stack: str
-    doi: dict | None
+    #doi: dict | None
 
 
 class SupaImageAcquisitionModel(BaseModel):
@@ -41,14 +41,14 @@ class SupaSampleModel(BaseModel):
     subtype: list[str]
     type: list[str]
 
+class SupaPublicationModel(BaseModel):
+    url: str
+    name : str
+    pub_type: str
 
 class SupaDatasetModel(BaseModel):
     name: str
     description: str
     thumbnail_url: str
     stage: str
-    publicaton: list[str]
-
-
-class SupaPublicatioModel(BaseModel):
-    doi: str
+    publications: list[SupaPublicationModel]

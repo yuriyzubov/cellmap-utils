@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 from typing import Dict, Any
-import json
 
 
 def generate_pydantic_model(data: Dict[str, Any], model_name: str ) -> type[BaseModel]:
@@ -22,4 +21,3 @@ def generate_pydantic_model(data: Dict[str, Any], model_name: str ) -> type[Base
     model_class = type(model_name, (BaseModel,), fields)
     return model_class
 
-class AirImageModel(BaseModel):

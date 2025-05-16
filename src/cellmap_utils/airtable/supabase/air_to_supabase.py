@@ -150,20 +150,33 @@ def get_sample_record(ds_name: str, at_api: api):
     collection_table = at_api.table(
         os.environ["AIRTABLE_BASE_ID"], os.environ["COLLECTION_TABLE_ID"]
     )
+    
+    institution_table = at_api.table(
+        os.environ["AIRTABLE_BASE_ID"], os.environ["INSTITUTION_TABLE_ID"]
+    )
     collection_record = collection_table.all(formula=match({"id": ds_name}))[0]
 
     sample_table = at_api.table(
         os.environ["AIRTABLE_BASE_ID"], os.environ["SAMPLE_TABLE_ID"]
     )
     sample_record = sample_table.get(collection_record["fields"]["sample"][0])
+    
+    try:
+        institution = institution_table.get(sample_record['fields']['institution'][0])
+    except:
+        institution = sample_record['fields']['institution']
 
     supa_sample = SupaSampleModel(
         name=ds_name,
         description=sample_record["fields"]["description"],
         protocol=sample_record["fields"]["description"],
         contributions=sample_record["fields"]["contributions"],
+        organism = sample_record['fields']['origin_species'],
+        institution = institution,
+        strain = sample_record['fields']['strain'],
         type=sample_record["fields"]["type"],
         subtype=sample_record["fields"]["subtype"],
+        origin_species = sample_record['fields']['origin_species']
     )
     return supa_sample
 

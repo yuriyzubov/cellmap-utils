@@ -3,7 +3,7 @@ import os
 import numpy
 from cellmap_utils.zarr.store import separate_store_path
 from cellmap_utils.zarr.node import access_parent
-
+from typing import Tuple
 
 def insert_omero_metadata(
     src: str,
@@ -188,3 +188,27 @@ def ome_ngff_only(zg: zarr.Group):
 
     for attr_name in to_delete_attrs:
         zg.attrs.__delitem__(attr_name)
+        
+        
+def round_decimals(group : zarr.Group, decimals : int):
+    """Round scale and translation metadata
+
+    Args:
+        group (zarr.Group): zarr group with ome-zarr metadata
+        decimals (int): number of decimals to round
+    """
+    z_attrs = dict()
+    z_attrs['multiscales'] = group.attrs['multiscales']
+    
+    # multiscale levels
+    ms_levels = z_attrs['multiscales'][0]['datasets']
+    for level in ms_levels:
+        scale = level['coordinateTransformations'][0]['scale']
+        translation = level['coordinateTransformations'][1]['translation']
+        level['coordinateTransformations'][0]['scale'] = [round(sc, decimals) for sc in scale]
+        level['coordinateTransformations'][1]['translation'] = [round(tr, decimals) for tr in translation]
+    group.attrs['multiscales'] = z_attrs['multiscales']
+    
+def get_s0_level(zg : zarr.Group) -> Tuple[list[float],list[float]]:
+    level_0 = zg.attrs['multiscales'][0]['datasets'][0]['coordinateTransformations']
+    return (level_0[0]['scale'], level_0[1]['translation'])

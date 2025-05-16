@@ -7,7 +7,7 @@ name = "cellmap-utils"
 dynamic = ["version"]
 description = ''
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.8.10"
 license = "MIT"
 keywords = []
 authors = [
@@ -24,7 +24,14 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = []
+dependencies = [
+  "fibsem_tools>=7.0.5",
+  "fsspec>=2025.3.2",
+  "numpy>=1.24.4",
+  "pyairtable>=3.1.1",
+  "pydantic>=2.11.3",
+  "universal-pathlib>=0.2.5",
+]
 
 [project.urls]
 Documentation = "https://github.com/U.N. Owen/cellmap-utils#readme"

@@ -1,6 +1,6 @@
 # from cellmap_utils._version import version
 
-from .zarr.metadata import get_multiscale_metadata, insert_omero_metadata, ome_ngff_only
+from .zarr.metadata import get_multiscale_metadata, insert_omero_metadata, ome_ngff_only, get_single_scale_metadata
 from .zarr.node import access_parent, repair_zarr_branch
 from .zarr.store import separate_store_path
 from .airtable.filter import filter_records
@@ -11,7 +11,11 @@ from .airtable.supabase import (
     get_dataset_record,
     get_dataset_full,
 )
+
+from .zarr import validate_ome, validate_roi_offset, get_matching_scale, recalibrate_offset
 from .airtable.upsert import upsert_image, upsert_record_scene_tables
+
+
 
 
 __all__ = [
@@ -30,4 +34,8 @@ __all__ = [
     "get_dataset_record",
     "get_dataset_full",
     "filter_records",
+    "validate_ome",
+    "validate_roi_offset",
+    "get_matching_scale",
+    "round_decimals"
 ]

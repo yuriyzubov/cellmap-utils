@@ -440,6 +440,87 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.node" class="md-nav__link">
+    <span class="md-ellipsis">
+      node
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.node.access_parent" class="md-nav__link">
+    <span class="md-ellipsis">
+      access_parent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.node.repair_zarr_branch" class="md-nav__link">
+    <span class="md-ellipsis">
+      repair_zarr_branch
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.roi" class="md-nav__link">
+    <span class="md-ellipsis">
+      roi
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.roi.recalibrate_offset" class="md-nav__link">
+    <span class="md-ellipsis">
+      recalibrate_offset
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.store" class="md-nav__link">
+    <span class="md-ellipsis">
+      store
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.store.separate_store_path" class="md-nav__link">
+    <span class="md-ellipsis">
+      separate_store_path
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.validate" class="md-nav__link">
+    <span class="md-ellipsis">
+      validate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.validate.validate_ome" class="md-nav__link">
+    <span class="md-ellipsis">
+      validate_ome
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -534,6 +615,87 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.node" class="md-nav__link">
+    <span class="md-ellipsis">
+      node
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.node.access_parent" class="md-nav__link">
+    <span class="md-ellipsis">
+      access_parent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.node.repair_zarr_branch" class="md-nav__link">
+    <span class="md-ellipsis">
+      repair_zarr_branch
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.roi" class="md-nav__link">
+    <span class="md-ellipsis">
+      roi
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.roi.recalibrate_offset" class="md-nav__link">
+    <span class="md-ellipsis">
+      recalibrate_offset
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.store" class="md-nav__link">
+    <span class="md-ellipsis">
+      store
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.store.separate_store_path" class="md-nav__link">
+    <span class="md-ellipsis">
+      separate_store_path
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.validate" class="md-nav__link">
+    <span class="md-ellipsis">
+      validate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cellmap_utils.zarr.validate.validate_ome" class="md-nav__link">
+    <span class="md-ellipsis">
+      validate_ome
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -588,14 +750,119 @@
     <div class="doc doc-contents ">
 
         <p>Insert or update missing omero transitional metadata into .zattrs metadata of parent group for the input zarr array.</p>
-<p>Args:
-    src (str): Path to Zarr array.
-    window_max (int, optional): Max view window value. Defaults to None.
-    window_min (int, optional): Min view window value. Defaults to None.
-    window_start (int, optional): Contrast min value. Defaults to None.
-    window_end (int, optional): Contrast max value. Defaults to None.
-    id (int, optional): Defaults to None.
-    name (str, optional): Name of the dataset. Defaults to None.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>src</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to Zarr array.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>window_max</code></td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Max view window value. Defaults to None.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>window_min</code></td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Min view window value. Defaults to None.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>window_start</code></td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Contrast min value. Defaults to None.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>window_end</code></td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Contrast max value. Defaults to None.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>id</code></td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Defaults to None.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>name</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name of the dataset. Defaults to None.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
             <details class="quote">
               <summary>Source code in <code>src/cellmap_utils/zarr/metadata.py</code></summary>
@@ -746,15 +1013,127 @@
     <div class="doc doc-contents ">
 
         <p>Returns multiscales ngff metadata with a single level.</p>
-<p>Args:
-    ds_name (str): name of the dataset that contains the data.
-    voxel_size (list[float]): scale. Example: [1.0, 1.0, 1.0]
-    translation (list[float]): offset. Example: [0.0, 0.0, 0.0]
-    name (str): Name of a multiscale set.
-    units (str, optional): Physical units. Defaults to 'nanometer'.
-    axes (list[str], optional): Axes labeling. Defaults to ['z', 'y', 'x'].</p>
-<p>Returns:
-    <em>type</em>: <em>description</em></p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>ds_name</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>name of the dataset that contains the data.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>voxel_size</code></td>
+            <td>
+                  <code>list[float]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>scale. Example: [1.0, 1.0, 1.0]</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>translation</code></td>
+            <td>
+                  <code>list[float]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>offset. Example: [0.0, 0.0, 0.0]</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>name</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name of a multiscale set.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>units</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Physical units. Defaults to 'nanometer'.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;nanometer&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>axes</code></td>
+            <td>
+                  <code>list[str]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Axes labeling. Defaults to ['z', 'y', 'x'].</p>
+              </div>
+            </td>
+            <td>
+                  <code>[&#39;z&#39;, &#39;y&#39;, &#39;x&#39;]</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>_type_</code></td>            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><em>description</em></p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
             <details class="quote">
               <summary>Source code in <code>src/cellmap_utils/zarr/metadata.py</code></summary>
@@ -861,15 +1240,127 @@
     <div class="doc doc-contents ">
 
         <p>Generates a multiscale metadata from specified voxel size, offset and multi-scale pyramid levels.</p>
-<p>Args:
-    voxel_size (list[float]): physical size of the voxel
-    translation (list[float]): physical translation of the center of the voxel.
-    levels (int): how many levels are present in the multis-scale pyramid.
-    units (str, optional): Physical units. Defaults to 'nanometer'.
-    axes (list[str], optional): Axis order. Defaults to ['z', 'y', 'x'].
-    name (str, optional): Name of the dataset that would utilize multi-scale metadata. Defaults to ''.</p>
-<p>Returns:
-    <em>type</em>: <em>description</em></p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>voxel_size</code></td>
+            <td>
+                  <code>list[float]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>physical size of the voxel</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>translation</code></td>
+            <td>
+                  <code>list[float]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>physical translation of the center of the voxel.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>levels</code></td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>how many levels are present in the multis-scale pyramid.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>units</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Physical units. Defaults to 'nanometer'.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;nanometer&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>axes</code></td>
+            <td>
+                  <code>list[str]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Axis order. Defaults to ['z', 'y', 'x'].</p>
+              </div>
+            </td>
+            <td>
+                  <code>[&#39;z&#39;, &#39;y&#39;, &#39;x&#39;]</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>name</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name of the dataset that would utilize multi-scale metadata. Defaults to ''.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;&#39;</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>_type_</code></td>            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><em>description</em></p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
             <details class="quote">
               <summary>Source code in <code>src/cellmap_utils/zarr/metadata.py</code></summary>
@@ -996,8 +1487,35 @@
     <div class="doc doc-contents ">
 
         <p>Delete all attrs from .zattrs that are not part of the OME-NGFF Zarr spec and CellMap metadata.</p>
-<p>Args:
-    zg (zarr.Group): zarr group that contains multiscale metadata.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>zg</code></td>
+            <td>
+                  <code><span title="zarr.Group">Group</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>zarr group that contains multiscale metadata.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
             <details class="quote">
               <summary>Source code in <code>src/cellmap_utils/zarr/metadata.py</code></summary>
@@ -1058,9 +1576,49 @@
     <div class="doc doc-contents ">
 
         <p>Round scale and translation metadata</p>
-<p>Args:
-    group (zarr.Group): zarr group with ome-zarr metadata
-    decimals (int): number of decimals to round</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>group</code></td>
+            <td>
+                  <code><span title="zarr.Group">Group</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>zarr group with ome-zarr metadata</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>decimals</code></td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>number of decimals to round</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
             <details class="quote">
               <summary>Source code in <code>src/cellmap_utils/zarr/metadata.py</code></summary>
@@ -1099,6 +1657,707 @@
 </span><span id="__span-0-208"><a id="__codelineno-0-208" name="__codelineno-0-208"></a>        <span class="n">level</span><span class="p">[</span><span class="s1">&#39;coordinateTransformations&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;scale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">decimals</span><span class="p">)</span> <span class="k">for</span> <span class="n">sc</span> <span class="ow">in</span> <span class="n">scale</span><span class="p">]</span>
 </span><span id="__span-0-209"><a id="__codelineno-0-209" name="__codelineno-0-209"></a>        <span class="n">level</span><span class="p">[</span><span class="s1">&#39;coordinateTransformations&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;translation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">tr</span><span class="p">,</span> <span class="n">decimals</span><span class="p">)</span> <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">translation</span><span class="p">]</span>
 </span><span id="__span-0-210"><a id="__codelineno-0-210" name="__codelineno-0-210"></a>    <span class="n">group</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;multiscales&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z_attrs</span><span class="p">[</span><span class="s1">&#39;multiscales&#39;</span><span class="p">]</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="cellmap_utils.zarr.node"></a>
+    <div class="doc doc-contents first">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cellmap_utils.zarr.node.access_parent" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">access_parent</span>
+
+
+<a href="#cellmap_utils.zarr.node.access_parent" class="headerlink" title="Permanent link">#</a></h2>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">access_parent</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get the parent (zarr.Group) of an input zarr array(ds).</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>node</code></td>
+            <td>
+                  <code><span title="zarr.core.Array">Array</span> or <span title="zarr.hierarchy.Group">Group</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><em>description</em></p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>RuntimeError</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>returned if the node array is in the parent group,</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>zarr.hierarchy.Group : parent group that contains input group/array</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>src/cellmap_utils/zarr/node.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span>
+<span class="normal"><a href="#__codelineno-0-29">29</a></span>
+<span class="normal"><a href="#__codelineno-0-30">30</a></span>
+<span class="normal"><a href="#__codelineno-0-31">31</a></span>
+<span class="normal"><a href="#__codelineno-0-32">32</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="k">def</span><span class="w"> </span><span class="nf">access_parent</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">zarr</span><span class="o">.</span><span class="n">Group</span> <span class="o">|</span> <span class="n">zarr</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="sd">    Get the parent (zarr.Group) of an input zarr array(ds).</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="sd">        node (zarr.core.Array or zarr.hierarchy.Group): _description_</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="sd">    Raises:</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="sd">        RuntimeError: returned if the node array is in the parent group,</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="sd">        or the group itself is the root group</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="sd">        zarr.hierarchy.Group : parent group that contains input group/array</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a>    <span class="n">store_path</span><span class="p">,</span> <span class="n">node_path</span> <span class="o">=</span> <span class="n">separate_store_path</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>    <span class="k">if</span> <span class="n">node_path</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a>        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a>            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is in the root group of the </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2"> store.&quot;</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a>        <span class="p">)</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a>        <span class="k">return</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">store</span><span class="o">=</span><span class="n">store_path</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">node_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cellmap_utils.zarr.node.repair_zarr_branch" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">repair_zarr_branch</span>
+
+
+<a href="#cellmap_utils.zarr.node.repair_zarr_branch" class="headerlink" title="Permanent link">#</a></h2>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">repair_zarr_branch</span><span class="p">(</span><span class="n">input_zarr_path</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>A recursive methond that adds missing .zgroup file in any parent zarr group
+   between input zarr group and root of the zarr container.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>input_zarr_path</code></td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><em>description</em></p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>src/cellmap_utils/zarr/node.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-40">40</a></span>
+<span class="normal"><a href="#__codelineno-0-41">41</a></span>
+<span class="normal"><a href="#__codelineno-0-42">42</a></span>
+<span class="normal"><a href="#__codelineno-0-43">43</a></span>
+<span class="normal"><a href="#__codelineno-0-44">44</a></span>
+<span class="normal"><a href="#__codelineno-0-45">45</a></span>
+<span class="normal"><a href="#__codelineno-0-46">46</a></span>
+<span class="normal"><a href="#__codelineno-0-47">47</a></span>
+<span class="normal"><a href="#__codelineno-0-48">48</a></span>
+<span class="normal"><a href="#__codelineno-0-49">49</a></span>
+<span class="normal"><a href="#__codelineno-0-50">50</a></span>
+<span class="normal"><a href="#__codelineno-0-51">51</a></span>
+<span class="normal"><a href="#__codelineno-0-52">52</a></span>
+<span class="normal"><a href="#__codelineno-0-53">53</a></span>
+<span class="normal"><a href="#__codelineno-0-54">54</a></span>
+<span class="normal"><a href="#__codelineno-0-55">55</a></span>
+<span class="normal"><a href="#__codelineno-0-56">56</a></span>
+<span class="normal"><a href="#__codelineno-0-57">57</a></span>
+<span class="normal"><a href="#__codelineno-0-58">58</a></span>
+<span class="normal"><a href="#__codelineno-0-59">59</a></span>
+<span class="normal"><a href="#__codelineno-0-60">60</a></span>
+<span class="normal"><a href="#__codelineno-0-61">61</a></span>
+<span class="normal"><a href="#__codelineno-0-62">62</a></span>
+<span class="normal"><a href="#__codelineno-0-63">63</a></span>
+<span class="normal"><a href="#__codelineno-0-64">64</a></span>
+<span class="normal"><a href="#__codelineno-0-65">65</a></span>
+<span class="normal"><a href="#__codelineno-0-66">66</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="k">def</span><span class="w"> </span><span class="nf">repair_zarr_branch</span><span class="p">(</span><span class="n">input_zarr_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;A recursive methond that adds missing .zgroup file in any parent zarr group</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="sd">       between input zarr group and root of the zarr container.</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="sd">        input_zarr_path (str): _description_</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>        <span class="n">zarr_path</span> <span class="o">=</span> <span class="n">input_zarr_path</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/ &quot;</span><span class="p">)</span>  <span class="c1"># remove unnecessary &#39;/&#39; and &#39; &#39;</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a>        <span class="n">fs</span> <span class="o">=</span> <span class="n">get_file_system</span><span class="p">(</span><span class="n">zarr_path</span><span class="p">)</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a>        <span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">zarr_path</span><span class="p">)</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>    <span class="k">except</span><span class="p">:</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;Path not found!&quot;</span><span class="p">)</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a>    <span class="n">z_store</span><span class="p">,</span> <span class="n">z_path</span> <span class="o">=</span> <span class="n">zarr_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.zarr&quot;</span><span class="p">)</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a>        <span class="n">read</span><span class="p">(</span><span class="n">zarr_path</span><span class="p">)</span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a>    <span class="k">except</span><span class="p">:</span>
+</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;not found, added .zgroup to: &quot;</span><span class="p">,</span> <span class="n">zarr_path</span><span class="p">)</span>
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">UPath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">zarr_path</span><span class="p">,</span> <span class="s2">&quot;.zgroup&quot;</span><span class="p">)),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a>            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">({</span><span class="s2">&quot;zarr_format&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">))</span>
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a>
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63"></a>    <span class="k">if</span> <span class="n">z_path</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/ &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/ &quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64"></a>        <span class="n">repair_zarr_branch</span><span class="p">(</span>
+</span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65"></a>            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">z_store</span><span class="si">}</span><span class="s2">.zarr&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">z_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span>
+</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66"></a>        <span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="cellmap_utils.zarr.roi"></a>
+    <div class="doc doc-contents first">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cellmap_utils.zarr.roi.recalibrate_offset" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">recalibrate_offset</span>
+
+
+<a href="#cellmap_utils.zarr.roi.recalibrate_offset" class="headerlink" title="Permanent link">#</a></h2>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">recalibrate_offset</span><span class="p">(</span><span class="n">roi</span><span class="p">,</span> <span class="n">grid_spacing</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>The offset of the roi at multiscale level with scale=grid_spacing must be divisible by grid_spacing.
+    This method would recalibrate offset, if roi grid does not align with grid {scale : grid_spacing, translation : [0.0, 0.0, 0.0]}  </p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>roi</code></td>
+            <td>
+                  <code><span title="zarr.Group">Group</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>roi zarr group with multiscale pyramid </p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>grid_spacing</code></td>
+            <td>
+                  <code>list[float]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>grid spacing, with assumption that translation=[0.0, 0.0, 0.0]</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Tuple">Tuple</span>[list[float], list[float]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Tuple[list[float], list[float]]: returns (ROI s0 scale, recalibrated offset)</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>src/cellmap_utils/zarr/roi.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span>
+<span class="normal"><a href="#__codelineno-0-29">29</a></span>
+<span class="normal"><a href="#__codelineno-0-30">30</a></span>
+<span class="normal"><a href="#__codelineno-0-31">31</a></span>
+<span class="normal"><a href="#__codelineno-0-32">32</a></span>
+<span class="normal"><a href="#__codelineno-0-33">33</a></span>
+<span class="normal"><a href="#__codelineno-0-34">34</a></span>
+<span class="normal"><a href="#__codelineno-0-35">35</a></span>
+<span class="normal"><a href="#__codelineno-0-36">36</a></span>
+<span class="normal"><a href="#__codelineno-0-37">37</a></span>
+<span class="normal"><a href="#__codelineno-0-38">38</a></span>
+<span class="normal"><a href="#__codelineno-0-39">39</a></span>
+<span class="normal"><a href="#__codelineno-0-40">40</a></span>
+<span class="normal"><a href="#__codelineno-0-41">41</a></span>
+<span class="normal"><a href="#__codelineno-0-42">42</a></span>
+<span class="normal"><a href="#__codelineno-0-43">43</a></span>
+<span class="normal"><a href="#__codelineno-0-44">44</a></span>
+<span class="normal"><a href="#__codelineno-0-45">45</a></span>
+<span class="normal"><a href="#__codelineno-0-46">46</a></span>
+<span class="normal"><a href="#__codelineno-0-47">47</a></span>
+<span class="normal"><a href="#__codelineno-0-48">48</a></span>
+<span class="normal"><a href="#__codelineno-0-49">49</a></span>
+<span class="normal"><a href="#__codelineno-0-50">50</a></span>
+<span class="normal"><a href="#__codelineno-0-51">51</a></span>
+<span class="normal"><a href="#__codelineno-0-52">52</a></span>
+<span class="normal"><a href="#__codelineno-0-53">53</a></span>
+<span class="normal"><a href="#__codelineno-0-54">54</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="k">def</span><span class="w"> </span><span class="nf">recalibrate_offset</span><span class="p">(</span><span class="n">roi</span><span class="p">:</span> <span class="n">zarr</span><span class="o">.</span><span class="n">Group</span><span class="p">,</span> <span class="n">grid_spacing</span> <span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;The offset of the roi at multiscale level with scale=grid_spacing must be divisible by grid_spacing.</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="sd">        This method would recalibrate offset, if roi grid does not align with grid {scale : grid_spacing, translation : [0.0, 0.0, 0.0]}  </span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="sd">        roi (zarr.Group): roi zarr group with multiscale pyramid </span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="sd">        grid_spacing (list[float]): grid spacing, with assumption that translation=[0.0, 0.0, 0.0]</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="sd">        Tuple[list[float], list[float]]: returns (ROI s0 scale, recalibrated offset)</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a>    <span class="n">roi_scale</span><span class="p">,</span> <span class="n">roi_offset</span> <span class="o">=</span> <span class="n">get_s0_level</span><span class="p">(</span><span class="n">roi</span><span class="p">)</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a>    <span class="c1"># calculate log2(roi s0 level/grid_spacing), for transforming it to the dataset </span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">log2</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>    <span class="n">roi_level</span> <span class="o">=</span> <span class="p">[</span><span class="n">log2</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">roi_sc</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">ds_sc</span><span class="p">))</span> <span class="k">for</span> <span class="n">roi_sc</span><span class="p">,</span> <span class="n">ds_sc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">roi_scale</span><span class="p">,</span> <span class="n">grid_spacing</span><span class="p">)]</span> 
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>    <span class="c1"># calculate roi translation as if it was rescaled to scale=grid_spacing</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a>    <span class="n">roi_tr_at_grid_spacing</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a>            <span class="n">tr_n</span> <span class="o">-</span> <span class="n">sc_n</span> <span class="o">*</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">-</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="n">l_n</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a>            <span class="k">for</span> <span class="p">(</span><span class="n">sc_n</span><span class="p">,</span> <span class="n">tr_n</span><span class="p">,</span> <span class="n">l_n</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">roi_scale</span><span class="p">,</span> <span class="n">roi_offset</span><span class="p">,</span> <span class="n">roi_level</span><span class="p">)</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a>        <span class="p">]</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>    <span class="c1"># shift roi offset to align with grid spacing  </span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>    <span class="n">tr_roi_at_s0_correct</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">sc</span><span class="p">))</span><span class="o">*</span><span class="n">sc</span> <span class="k">for</span> <span class="n">sc</span><span class="p">,</span> <span class="n">tr</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">grid_spacing</span><span class="p">,</span> <span class="n">roi_tr_at_grid_spacing</span><span class="p">)]</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a>    <span class="n">tr_roi_sn_correct</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a>        <span class="nb">round</span><span class="p">((</span><span class="n">sc</span> <span class="o">*</span> <span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">level</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">))</span> <span class="o">+</span> <span class="n">tr</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>        <span class="k">for</span> <span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">tr</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">grid_spacing</span><span class="p">,</span> <span class="n">tr_roi_at_s0_correct</span><span class="p">,</span> <span class="n">roi_level</span><span class="p">)</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>    <span class="p">]</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a>    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;scale&#39;</span><span class="p">:</span> <span class="n">roi_scale</span><span class="p">,</span> <span class="s1">&#39;translation&#39;</span> <span class="p">:</span> <span class="n">tr_roi_sn_correct</span><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="cellmap_utils.zarr.store"></a>
+    <div class="doc doc-contents first">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cellmap_utils.zarr.store.separate_store_path" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">separate_store_path</span>
+
+
+<a href="#cellmap_utils.zarr.store.separate_store_path" class="headerlink" title="Permanent link">#</a></h2>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">separate_store_path</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>sometimes you can pass a total os path to node, leading to
+an empty('') node.path attribute.
+the correct way is to separate path to container(.n5, .zarr)
+from path to array within a container.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>store</code></td>
+            <td>
+                  <code>string</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>path to store</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code>path</code></td>
+            <td>
+                  <code>string</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>path array/group (.n5 or .zarr)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>(string, string)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>returns regularized store and group/array path</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>src/cellmap_utils/zarr/store.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">separate_store_path</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="sd">    sometimes you can pass a total os path to node, leading to</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="sd">    an empty(&#39;&#39;) node.path attribute.</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="sd">    the correct way is to separate path to container(.n5, .zarr)</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="sd">    from path to array within a container.</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="sd">        store (string): path to store</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="sd">        path (string): path array/group (.n5 or .zarr)</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="sd">        (string, string): returns regularized store and group/array path</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a>    <span class="n">new_store</span><span class="p">,</span> <span class="n">path_prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">store</span><span class="p">)</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a>    <span class="k">if</span> <span class="s2">&quot;.zarr&quot;</span> <span class="ow">in</span> <span class="n">path_prefix</span><span class="p">:</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a>        <span class="k">return</span> <span class="n">store</span><span class="p">,</span> <span class="n">path</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a>    <span class="k">return</span> <span class="n">separate_store_path</span><span class="p">(</span><span class="n">new_store</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_prefix</span><span class="p">,</span> <span class="n">path</span><span class="p">))</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="cellmap_utils.zarr.validate"></a>
+    <div class="doc doc-contents first">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="cellmap_utils.zarr.validate.validate_ome" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">validate_ome</span>
+
+
+<a href="#cellmap_utils.zarr.validate.validate_ome" class="headerlink" title="Permanent link">#</a></h2>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">validate_ome</span><span class="p">(</span><span class="n">zg</span><span class="p">)</span>
+</span></code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>thin wrapper method for ngff_zarr.validate. </p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code>zg</code></td>
+            <td>
+                  <code><span title="zarr.Group">Group</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>the input zarr group with a json schema to validate.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+            <details class="quote">
+              <summary>Source code in <code>src/cellmap_utils/zarr/validate.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">validate_ome</span><span class="p">(</span><span class="n">zg</span> <span class="p">:</span> <span class="n">zarr</span><span class="o">.</span><span class="n">Group</span><span class="p">):</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;thin wrapper method for ngff_zarr.validate. </span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="sd">        zg (zarr.Group): the input zarr group with a json schema to validate.</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a>    <span class="n">nz</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">ngff_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">zg</span><span class="o">.</span><span class="n">attrs</span><span class="p">),</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;0.4&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
     </div>

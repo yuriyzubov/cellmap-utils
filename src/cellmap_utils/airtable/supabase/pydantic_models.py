@@ -38,8 +38,11 @@ class SupaSampleModel(BaseModel):
     description: str
     protocol: str
     contributions: str
+    organism : list[str]
     subtype: list[str]
     type: list[str]
+    institution: list[str]
+    origin_species : list[str]
 
 class SupaPublicationModel(BaseModel):
     url: str

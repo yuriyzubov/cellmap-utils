@@ -78,8 +78,14 @@ def get_image_record(image_path: str, ds_name: str, at_api: api):
 
     if image_record["fields"]["image_type"] == "em":
         pub_name = "Reconstructed FIB-SEM data"
+        image_stack = f"{ds_name}_{name}"
+    elif image_record["fields"]["image_type"] == "human_segmentation":
+        pub_name = "Segmentations"
+        image_stack = f"{ds_name}_groundtruth"
     else:
         pub_name = "Segmentations"
+        image_stack = f"{ds_name}_{name}"
+
 
     print(image_record)
     supa_image = SupaImageModel(
@@ -104,7 +110,7 @@ def get_image_record(image_path: str, ds_name: str, at_api: api):
         grid_units=["nm", "nm", "nm"],
         grid_index_order="C",
         stage="dev",
-        image_stack=f"{ds_name}_groundtruth",
+        image_stack=image_stack,
         #doi={"url": image_record["fields"]["doi_link_dataset"][0], "name": pub_name},
     )
 
@@ -137,7 +143,7 @@ def get_img_acq_record(ds_name: str, at_api: api):
         ],
         grid_spacing_unit="nm",
         grid_dimensions=[
-            image_record["fields"][f"size_{_}_pix"] for _ in ["z", "y", "x"]
+            image_record["fields"][f"size_{_}_pix"]*fibsem_record["fields"][f"resolution_{_}_nm"] for _ in ["z", "y", "x"]
         ],
         grid_dimensions_unit="nm",
     )
@@ -207,7 +213,7 @@ def get_dataset_record(ds_name: str, at_api: api):
     supa_dataset = SupaDatasetModel(
         name=ds_name,
         description=collection_record["fields"]["description"],
-        thumbnail_url=f"s3://janelia-cosem-datasets/{ds_name}/thumbnail.jpg",
+        thumbnail_url=f"https://janelia-cosem-datasets.s3.amazonaws.com/janelia-cosem-datasets/{ds_name}/thumbnail.jpg",
         stage="dev",
         publications=pubs,
     )

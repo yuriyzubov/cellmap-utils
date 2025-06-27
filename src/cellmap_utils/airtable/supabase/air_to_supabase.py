@@ -36,7 +36,7 @@ def get_image_record(image_path: str, ds_name: str, at_api: api):
         os.environ["AIRTABLE_BASE_ID"], os.environ["INSTITUTION_TABLE_ID"]
     )
 
-    image_record = image_table.all(formula=match({"location": image_path.rstrip("/")}))[0]
+    image_record = image_table.all(formula=match({"location_s3": image_path.rstrip("/")}))[0]
     
     name = image_record["fields"]["name"]
     display_settings = {
@@ -175,7 +175,7 @@ def get_sample_record(ds_name: str, at_api: api):
     supa_sample = SupaSampleModel(
         name=ds_name,
         description=sample_record["fields"]["description"],
-        protocol=sample_record["fields"]["description"],
+        protocol=sample_record["fields"]["protocol"],
         contributions=sample_record["fields"]["contributions"],
         organism = sample_record['fields']['origin_species'],
         institution = institution,
@@ -213,7 +213,7 @@ def get_dataset_record(ds_name: str, at_api: api):
     supa_dataset = SupaDatasetModel(
         name=ds_name,
         description=collection_record["fields"]["description"],
-        thumbnail_url=f"https://janelia-cosem-datasets.s3.amazonaws.com/janelia-cosem-datasets/{ds_name}/thumbnail.jpg",
+        thumbnail_url=f"https://janelia-cosem-datasets.s3.amazonaws.com/{ds_name}/thumbnail.jpg",
         stage="dev",
         publications=pubs,
     )

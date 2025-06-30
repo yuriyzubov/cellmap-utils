@@ -168,22 +168,11 @@ def get_sample_record(ds_name: str, at_api: api):
     sample_record = sample_table.get(collection_record["fields"]["sample"][0])
     
     try:
-        institution = institution_table.get(sample_record['fields']['institution'][0])
+        institution = institution_table.get(sample_record['fields'].get('institution')[0])
     except:
-        institution = sample_record['fields']['institution']
+        institution = sample_record['fields'].get('institution')
 
-    supa_sample = SupaSampleModel(
-        name=ds_name,
-        description=sample_record["fields"]["description"],
-        protocol=sample_record["fields"]["protocol"],
-        contributions=sample_record["fields"]["contributions"],
-        organism = sample_record['fields']['origin_species'],
-        institution = institution,
-        strain = sample_record['fields']['strain'],
-        type=sample_record["fields"]["type"],
-        subtype=sample_record["fields"]["subtype"],
-        origin_species = sample_record['fields']['origin_species']
-    )
+    supa_sample = SupaSampleModel.from_airt_sample_record(ds_name, institution, sample_record)
     return supa_sample
 
 

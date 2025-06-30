@@ -32,17 +32,35 @@ class SupaImageAcquisitionModel(BaseModel):
     grid_dimensions: list[int]
     grid_dimensions_unit: str
 
-
 class SupaSampleModel(BaseModel):
-    name: str
-    description: str
-    protocol: str
-    contributions: str
-    organism : list[str]
-    subtype: list[str]
-    type: list[str]
-    institution: list[str]
-    origin_species : list[str]
+    name: str 
+    description: str | None 
+    protocol: str | None
+    contributions: str | None
+    organism : list[str] | None
+    strain: list[str] | None
+    subtype: list[str] | None
+    type: list[str] | None
+    institution: list[str] | None
+    origin_species : list[str] | None
+    treatment : list[str] | None
+    
+    @classmethod
+    def from_airt_sample_record(cls, ds_name, institution, sample_record):
+        fields = sample_record["fields"]
+        return cls(
+            name=ds_name,
+            institution=institution,
+            description=fields.get("description"),
+            protocol=fields.get("protocol"),
+            contributions=fields.get("contributions"),
+            organism=fields.get("origin_species"),
+            treatment=fields.get("treatment"),
+            strain=fields.get("strain"),
+            type=fields.get("type"),
+            subtype=fields.get("subtype"),
+            origin_species=fields.get("origin_species"),
+        )
 
 class SupaPublicationModel(BaseModel):
     url: str

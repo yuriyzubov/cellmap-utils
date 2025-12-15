@@ -33,6 +33,7 @@ nav:
     - API:
       - airtable: api/api_airtable.md
       - zarr: api/api_zarr.md
+      - image: api/api_image.md
 
 plugins:
 - mkdocstrings:

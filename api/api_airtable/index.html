@@ -469,6 +469,28 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api_image/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    image
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1582,7 +1604,13 @@
 <span class="normal"><a href="#__codelineno-0-108">108</a></span>
 <span class="normal"><a href="#__codelineno-0-109">109</a></span>
 <span class="normal"><a href="#__codelineno-0-110">110</a></span>
-<span class="normal"><a href="#__codelineno-0-111">111</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_image_record</span><span class="p">(</span><span class="n">image_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ds_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">at_api</span><span class="p">:</span> <span class="n">api</span><span class="p">):</span>
+<span class="normal"><a href="#__codelineno-0-111">111</a></span>
+<span class="normal"><a href="#__codelineno-0-112">112</a></span>
+<span class="normal"><a href="#__codelineno-0-113">113</a></span>
+<span class="normal"><a href="#__codelineno-0-114">114</a></span>
+<span class="normal"><a href="#__codelineno-0-115">115</a></span>
+<span class="normal"><a href="#__codelineno-0-116">116</a></span>
+<span class="normal"><a href="#__codelineno-0-117">117</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_image_record</span><span class="p">(</span><span class="n">image_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ds_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">at_api</span><span class="p">:</span> <span class="n">api</span><span class="p">):</span>
 </span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Read an image record from airtable and return supabase image, dataset, sample, and acquisition records.</span>
 </span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a>
 </span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="sd">    Args:</span>
@@ -1604,7 +1632,7 @@
 </span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a>        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;AIRTABLE_BASE_ID&quot;</span><span class="p">],</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;INSTITUTION_TABLE_ID&quot;</span><span class="p">]</span>
 </span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a>    <span class="p">)</span>
 </span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a>
-</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>    <span class="n">image_record</span> <span class="o">=</span> <span class="n">image_table</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">formula</span><span class="o">=</span><span class="n">match</span><span class="p">({</span><span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="n">image_path</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)}))[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>    <span class="n">image_record</span> <span class="o">=</span> <span class="n">image_table</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">formula</span><span class="o">=</span><span class="n">match</span><span class="p">({</span><span class="s2">&quot;location_s3&quot;</span><span class="p">:</span> <span class="n">image_path</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)}))[</span><span class="mi">0</span><span class="p">]</span>
 </span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a>
 </span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>    <span class="n">name</span> <span class="o">=</span> <span class="n">image_record</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
 </span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a>    <span class="n">display_settings</span> <span class="o">=</span> <span class="p">{</span>
@@ -1646,37 +1674,43 @@
 </span><span id="__span-0-78"><a id="__codelineno-0-78" name="__codelineno-0-78"></a>
 </span><span id="__span-0-79"><a id="__codelineno-0-79" name="__codelineno-0-79"></a>    <span class="k">if</span> <span class="n">image_record</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">][</span><span class="s2">&quot;image_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;em&quot;</span><span class="p">:</span>
 </span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80"></a>        <span class="n">pub_name</span> <span class="o">=</span> <span class="s2">&quot;Reconstructed FIB-SEM data&quot;</span>
-</span><span id="__span-0-81"><a id="__codelineno-0-81" name="__codelineno-0-81"></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82"></a>        <span class="n">pub_name</span> <span class="o">=</span> <span class="s2">&quot;Segmentations&quot;</span>
-</span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83"></a>
-</span><span id="__span-0-84"><a id="__codelineno-0-84" name="__codelineno-0-84"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">image_record</span><span class="p">)</span>
-</span><span id="__span-0-85"><a id="__codelineno-0-85" name="__codelineno-0-85"></a>    <span class="n">supa_image</span> <span class="o">=</span> <span class="n">SupaImageModel</span><span class="p">(</span>
-</span><span id="__span-0-86"><a id="__codelineno-0-86" name="__codelineno-0-86"></a>        <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
-</span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87"></a>        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-</span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88"></a>        <span class="n">url</span><span class="o">=</span><span class="n">image_path</span><span class="p">,</span>
-</span><span id="__span-0-89"><a id="__codelineno-0-89" name="__codelineno-0-89"></a>        <span class="n">description</span><span class="o">=</span><span class="n">image_record</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">][</span><span class="s2">&quot;title&quot;</span><span class="p">],</span>
-</span><span id="__span-0-90"><a id="__codelineno-0-90" name="__codelineno-0-90"></a>        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;zarr&quot;</span><span class="p">,</span>
-</span><span id="__span-0-91"><a id="__codelineno-0-91" name="__codelineno-0-91"></a>        <span class="n">display_settings</span><span class="o">=</span><span class="n">display_settings</span><span class="p">,</span>
-</span><span id="__span-0-92"><a id="__codelineno-0-92" name="__codelineno-0-92"></a>        <span class="n">sample_type</span><span class="o">=</span><span class="n">image_record</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">][</span><span class="s2">&quot;value_type&quot;</span><span class="p">],</span>
-</span><span id="__span-0-93"><a id="__codelineno-0-93" name="__codelineno-0-93"></a>        <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span>
-</span><span id="__span-0-94"><a id="__codelineno-0-94" name="__codelineno-0-94"></a>        <span class="n">dataset_name</span><span class="o">=</span><span class="n">ds_name</span><span class="p">,</span>
-</span><span id="__span-0-95"><a id="__codelineno-0-95" name="__codelineno-0-95"></a>        <span class="n">institution</span><span class="o">=</span><span class="n">institution_table</span><span class="o">.</span><span class="n">get</span><span class="p">(</span> <span class="n">image_record</span><span class="p">[</span><span class="s1">&#39;fields&#39;</span><span class="p">][</span><span class="s1">&#39;institution&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])[</span><span class="s1">&#39;fields&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
-</span><span id="__span-0-96"><a id="__codelineno-0-96" name="__codelineno-0-96"></a>        <span class="n">grid_dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">],</span>
-</span><span id="__span-0-97"><a id="__codelineno-0-97" name="__codelineno-0-97"></a>        <span class="n">grid_scale</span><span class="o">=</span><span class="p">[</span>
-</span><span id="__span-0-98"><a id="__codelineno-0-98" name="__codelineno-0-98"></a>            <span class="n">image_record</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">][</span><span class="sa">f</span><span class="s2">&quot;resolution_</span><span class="si">{</span><span class="n">_</span><span class="si">}</span><span class="s2">_nm&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">]</span>
-</span><span id="__span-0-99"><a id="__codelineno-0-99" name="__codelineno-0-99"></a>        <span class="p">],</span>
-</span><span id="__span-0-100"><a id="__codelineno-0-100" name="__codelineno-0-100"></a>        <span class="n">grid_translation</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
-</span><span id="__span-0-101"><a id="__codelineno-0-101" name="__codelineno-0-101"></a>        <span class="c1"># [</span>
-</span><span id="__span-0-102"><a id="__codelineno-0-102" name="__codelineno-0-102"></a>        <span class="c1">#     image_record[&quot;fields&quot;][f&quot;offset_{_}_nm&quot;] for _ in [&quot;z&quot;, &quot;y&quot;, &quot;x&quot;]</span>
-</span><span id="__span-0-103"><a id="__codelineno-0-103" name="__codelineno-0-103"></a>        <span class="c1"># ],</span>
-</span><span id="__span-0-104"><a id="__codelineno-0-104" name="__codelineno-0-104"></a>        <span class="n">grid_units</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;nm&quot;</span><span class="p">,</span> <span class="s2">&quot;nm&quot;</span><span class="p">,</span> <span class="s2">&quot;nm&quot;</span><span class="p">],</span>
-</span><span id="__span-0-105"><a id="__codelineno-0-105" name="__codelineno-0-105"></a>        <span class="n">grid_index_order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">,</span>
-</span><span id="__span-0-106"><a id="__codelineno-0-106" name="__codelineno-0-106"></a>        <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;dev&quot;</span><span class="p">,</span>
-</span><span id="__span-0-107"><a id="__codelineno-0-107" name="__codelineno-0-107"></a>        <span class="n">image_stack</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ds_name</span><span class="si">}</span><span class="s2">_groundtruth&quot;</span><span class="p">,</span>
-</span><span id="__span-0-108"><a id="__codelineno-0-108" name="__codelineno-0-108"></a>        <span class="c1">#doi={&quot;url&quot;: image_record[&quot;fields&quot;][&quot;doi_link_dataset&quot;][0], &quot;name&quot;: pub_name},</span>
-</span><span id="__span-0-109"><a id="__codelineno-0-109" name="__codelineno-0-109"></a>    <span class="p">)</span>
-</span><span id="__span-0-110"><a id="__codelineno-0-110" name="__codelineno-0-110"></a>
-</span><span id="__span-0-111"><a id="__codelineno-0-111" name="__codelineno-0-111"></a>    <span class="k">return</span> <span class="n">supa_image</span>
+</span><span id="__span-0-81"><a id="__codelineno-0-81" name="__codelineno-0-81"></a>        <span class="n">image_stack</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ds_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82"></a>    <span class="k">elif</span> <span class="n">image_record</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">][</span><span class="s2">&quot;image_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;human_segmentation&quot;</span><span class="p">:</span>
+</span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83"></a>        <span class="n">pub_name</span> <span class="o">=</span> <span class="s2">&quot;Segmentations&quot;</span>
+</span><span id="__span-0-84"><a id="__codelineno-0-84" name="__codelineno-0-84"></a>        <span class="n">image_stack</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ds_name</span><span class="si">}</span><span class="s2">_groundtruth&quot;</span>
+</span><span id="__span-0-85"><a id="__codelineno-0-85" name="__codelineno-0-85"></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-0-86"><a id="__codelineno-0-86" name="__codelineno-0-86"></a>        <span class="n">pub_name</span> <span class="o">=</span> <span class="s2">&quot;Segmentations&quot;</span>
+</span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87"></a>        <span class="n">image_stack</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ds_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88"></a>
+</span><span id="__span-0-89"><a id="__codelineno-0-89" name="__codelineno-0-89"></a>
+</span><span id="__span-0-90"><a id="__codelineno-0-90" name="__codelineno-0-90"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">image_record</span><span class="p">)</span>
+</span><span id="__span-0-91"><a id="__codelineno-0-91" name="__codelineno-0-91"></a>    <span class="n">supa_image</span> <span class="o">=</span> <span class="n">SupaImageModel</span><span class="p">(</span>
+</span><span id="__span-0-92"><a id="__codelineno-0-92" name="__codelineno-0-92"></a>        <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+</span><span id="__span-0-93"><a id="__codelineno-0-93" name="__codelineno-0-93"></a>        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+</span><span id="__span-0-94"><a id="__codelineno-0-94" name="__codelineno-0-94"></a>        <span class="n">url</span><span class="o">=</span><span class="n">image_path</span><span class="p">,</span>
+</span><span id="__span-0-95"><a id="__codelineno-0-95" name="__codelineno-0-95"></a>        <span class="n">description</span><span class="o">=</span><span class="n">image_record</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">][</span><span class="s2">&quot;title&quot;</span><span class="p">],</span>
+</span><span id="__span-0-96"><a id="__codelineno-0-96" name="__codelineno-0-96"></a>        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;zarr&quot;</span><span class="p">,</span>
+</span><span id="__span-0-97"><a id="__codelineno-0-97" name="__codelineno-0-97"></a>        <span class="n">display_settings</span><span class="o">=</span><span class="n">display_settings</span><span class="p">,</span>
+</span><span id="__span-0-98"><a id="__codelineno-0-98" name="__codelineno-0-98"></a>        <span class="n">sample_type</span><span class="o">=</span><span class="n">image_record</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">][</span><span class="s2">&quot;value_type&quot;</span><span class="p">],</span>
+</span><span id="__span-0-99"><a id="__codelineno-0-99" name="__codelineno-0-99"></a>        <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span>
+</span><span id="__span-0-100"><a id="__codelineno-0-100" name="__codelineno-0-100"></a>        <span class="n">dataset_name</span><span class="o">=</span><span class="n">ds_name</span><span class="p">,</span>
+</span><span id="__span-0-101"><a id="__codelineno-0-101" name="__codelineno-0-101"></a>        <span class="n">institution</span><span class="o">=</span><span class="n">institution_table</span><span class="o">.</span><span class="n">get</span><span class="p">(</span> <span class="n">image_record</span><span class="p">[</span><span class="s1">&#39;fields&#39;</span><span class="p">][</span><span class="s1">&#39;institution&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])[</span><span class="s1">&#39;fields&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+</span><span id="__span-0-102"><a id="__codelineno-0-102" name="__codelineno-0-102"></a>        <span class="n">grid_dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">],</span>
+</span><span id="__span-0-103"><a id="__codelineno-0-103" name="__codelineno-0-103"></a>        <span class="n">grid_scale</span><span class="o">=</span><span class="p">[</span>
+</span><span id="__span-0-104"><a id="__codelineno-0-104" name="__codelineno-0-104"></a>            <span class="n">image_record</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">][</span><span class="sa">f</span><span class="s2">&quot;resolution_</span><span class="si">{</span><span class="n">_</span><span class="si">}</span><span class="s2">_nm&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">]</span>
+</span><span id="__span-0-105"><a id="__codelineno-0-105" name="__codelineno-0-105"></a>        <span class="p">],</span>
+</span><span id="__span-0-106"><a id="__codelineno-0-106" name="__codelineno-0-106"></a>        <span class="n">grid_translation</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+</span><span id="__span-0-107"><a id="__codelineno-0-107" name="__codelineno-0-107"></a>        <span class="c1"># [</span>
+</span><span id="__span-0-108"><a id="__codelineno-0-108" name="__codelineno-0-108"></a>        <span class="c1">#     image_record[&quot;fields&quot;][f&quot;offset_{_}_nm&quot;] for _ in [&quot;z&quot;, &quot;y&quot;, &quot;x&quot;]</span>
+</span><span id="__span-0-109"><a id="__codelineno-0-109" name="__codelineno-0-109"></a>        <span class="c1"># ],</span>
+</span><span id="__span-0-110"><a id="__codelineno-0-110" name="__codelineno-0-110"></a>        <span class="n">grid_units</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;nm&quot;</span><span class="p">,</span> <span class="s2">&quot;nm&quot;</span><span class="p">,</span> <span class="s2">&quot;nm&quot;</span><span class="p">],</span>
+</span><span id="__span-0-111"><a id="__codelineno-0-111" name="__codelineno-0-111"></a>        <span class="n">grid_index_order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">,</span>
+</span><span id="__span-0-112"><a id="__codelineno-0-112" name="__codelineno-0-112"></a>        <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;dev&quot;</span><span class="p">,</span>
+</span><span id="__span-0-113"><a id="__codelineno-0-113" name="__codelineno-0-113"></a>        <span class="n">image_stack</span><span class="o">=</span><span class="n">image_stack</span><span class="p">,</span>
+</span><span id="__span-0-114"><a id="__codelineno-0-114" name="__codelineno-0-114"></a>        <span class="c1">#doi={&quot;url&quot;: image_record[&quot;fields&quot;][&quot;doi_link_dataset&quot;][0], &quot;name&quot;: pub_name},</span>
+</span><span id="__span-0-115"><a id="__codelineno-0-115" name="__codelineno-0-115"></a>    <span class="p">)</span>
+</span><span id="__span-0-116"><a id="__codelineno-0-116" name="__codelineno-0-116"></a>
+</span><span id="__span-0-117"><a id="__codelineno-0-117" name="__codelineno-0-117"></a>    <span class="k">return</span> <span class="n">supa_image</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
     </div>

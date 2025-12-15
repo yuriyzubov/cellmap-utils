@@ -16,8 +16,6 @@ def get_contrast_values(arr: np.ndarray,
         
     Returns:
         Dictionary containing:
-        - min_val: Minimum value in the array
-        - max_val: Maximum value in the array
         - percentile_low: Lower percentile value
         - percentile_high: Upper percentile value
         
@@ -40,8 +38,6 @@ def get_contrast_values(arr: np.ndarray,
     p_low, p_high = np.percentile(arr, [percentile_low, percentile_high])
     
     return {
-        'min_val': min_val,
-        'max_val': max_val,
         'percentile_low': float(p_low),
         'percentile_high': float(p_high)
     }

@@ -19,7 +19,7 @@ class SupaImageModel(BaseModel):
     grid_index_order: str
     stage: str
     image_stack: str
-    #doi: dict | None
+    doi: dict | None
 
 
 class SupaImageAcquisitionModel(BaseModel):

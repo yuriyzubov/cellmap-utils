@@ -111,7 +111,7 @@ def get_image_record(image_path: str, ds_name: str, at_api: api):
         grid_index_order="C",
         stage="dev",
         image_stack=image_stack,
-        #doi={"url": image_record["fields"]["doi_link_dataset"][0], "name": pub_name},
+        doi={"url": image_record["fields"]["doi_link_dataset"][0], "name": pub_name},
     )
 
     return supa_image
@@ -190,8 +190,9 @@ def get_dataset_record(ds_name: str, at_api: api):
     sample_record = sample_table.get(collection_record['fields']['sample'][0])
     
     pubs = []
-    for doi_id in sample_record['fields']['doi']:
+    for doi_id in collection_record['fields']['doi']:
         doi_record = doi_table.get(doi_id)
+        print(doi_record)
         supa_doi = SupaPublicationModel(
             name=doi_record['fields']['doi_name'],
             url = doi_record['fields']['doi_link_dataset'],
@@ -201,7 +202,7 @@ def get_dataset_record(ds_name: str, at_api: api):
     print(pubs)
     supa_dataset = SupaDatasetModel(
         name=ds_name,
-        description=collection_record["fields"]["description"],
+        description=sample_record["fields"]["description"],
         thumbnail_url=f"https://janelia-cosem-datasets.s3.amazonaws.com/{ds_name}/thumbnail.jpg",
         stage="dev",
         publications=pubs,

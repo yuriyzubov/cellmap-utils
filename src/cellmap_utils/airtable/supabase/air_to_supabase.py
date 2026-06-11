@@ -2,6 +2,9 @@ from pyairtable import api
 
 # from dotenv import load_dotenv
 import os
+import numpy as np
+import zarr
+from fibsem_tools import read
 from pyairtable.formulas import match
 from datetime import datetime
 
@@ -12,6 +15,40 @@ from .pydantic_models import (
     SupaPublicationModel,
     SupaSampleModel,
 )
+
+
+def get_contrast_limits(image_path: str):
+    """Derive display contrast limits from the image array datatype.
+
+    Reads the underlying zarr array (same access pattern as `upsert_image`) and
+    sets the contrast limits to span the full range representable by its dtype:
+    integer arrays use ``iinfo`` (e.g. 0-255 for uint8, 0-65535 for uint16) and
+    float arrays use a normalized 0-1 range.
+
+    Args:
+        image_path (str): location of the image (zarr group or array).
+
+    Returns:
+        dict: contrast limits with ``start``, ``end``, ``min`` and ``max`` keys.
+    """
+
+    input_zarr = read(image_path.rstrip("/"))
+    if isinstance(input_zarr, zarr.Group):
+        zg = input_zarr
+        z_arr_name = "s0"
+    else:
+        zg_path, z_arr_name = os.path.split(image_path.rstrip("/"))
+        zg = read(zg_path)
+
+    dtype = np.dtype(zg[z_arr_name].dtype)
+
+    if np.issubdtype(dtype, np.integer):
+        info = np.iinfo(dtype)
+        low, high = int(info.min), int(info.max)
+    else:
+        low, high = 0.0, 1.0
+
+    return {"start": low, "end": high, "min": low, "max": high}
 
 
 def get_image_record(image_path: str, ds_name: str, at_api: api):
@@ -41,7 +78,7 @@ def get_image_record(image_path: str, ds_name: str, at_api: api):
     name = image_record["fields"]["name"]
     display_settings = {
         "invertLUT": False,
-        "contrastLimits": {"end": 255, "max": 255, "min": 0, "start": 0},
+        "contrastLimits": get_contrast_limits(image_path),
     }
 
     content_type_mapping = {
@@ -111,7 +148,7 @@ def get_image_record(image_path: str, ds_name: str, at_api: api):
         grid_index_order="C",
         stage="dev",
         image_stack=image_stack,
-        #doi={"url": image_record["fields"]["doi_link_dataset"][0], "name": pub_name},
+        doi={"url": image_record["fields"]["doi_link_dataset"][0], "name": pub_name},
     )
 
     return supa_image
@@ -190,8 +227,9 @@ def get_dataset_record(ds_name: str, at_api: api):
     sample_record = sample_table.get(collection_record['fields']['sample'][0])
     
     pubs = []
-    for doi_id in sample_record['fields']['doi']:
+    for doi_id in collection_record['fields']['doi']:
         doi_record = doi_table.get(doi_id)
+        print(doi_record)
         supa_doi = SupaPublicationModel(
             name=doi_record['fields']['doi_name'],
             url = doi_record['fields']['doi_link_dataset'],
@@ -201,7 +239,7 @@ def get_dataset_record(ds_name: str, at_api: api):
     print(pubs)
     supa_dataset = SupaDatasetModel(
         name=ds_name,
-        description=collection_record["fields"]["description"],
+        description=sample_record["fields"]["description"],
         thumbnail_url=f"https://janelia-cosem-datasets.s3.amazonaws.com/{ds_name}/thumbnail.jpg",
         stage="dev",
         publications=pubs,

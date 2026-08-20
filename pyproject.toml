@@ -40,6 +40,12 @@ dependencies = [
 fibsem = [
   "fibsem_tools>=7.0.5",
 ]
+# needed for reading OME-NGFF metadata from Zarr v3 (zarr.json) stores, as
+# used by upsert_image(). Requires zarr>=3.1.1, so keep it out of core deps
+# to avoid conflicting with fibsem (above) in the same environment.
+zarr3 = [
+  "ome-zarr-models>=1.7",
+]
 
 [project.urls]
 Documentation = "https://github.com/U.N. Owen/cellmap-utils#readme"

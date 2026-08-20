@@ -4,6 +4,9 @@ import numpy
 from cellmap_utils.zarr.store import separate_store_path
 from cellmap_utils.zarr.node import access_parent
 from typing import Tuple
+import logging
+
+logger = logging.getLogger(__name__)
 
 def insert_omero_metadata(
     src: str,
@@ -212,3 +215,33 @@ def round_decimals(group : zarr.Group, decimals : int):
 def get_s0_level(zg : zarr.Group) -> Tuple[list[float],list[float]]:
     level_0 = zg.attrs['multiscales'][0]['datasets'][0]['coordinateTransformations']
     return (level_0[0]['scale'], level_0[1]['translation'])
+
+
+def remove_checksum(path_to_arr: str):
+    """Remove checksum parameter from zarr array metadata, to make it compatible with tensorstore.
+    
+    Args:
+        path_to_arr (str): path to Zarr array
+    """
+    import json
+    
+    try:
+        path_to_zarray = os.path.join(path_to_arr, '.zarray')
+        with open(path_to_zarray, 'r+') as f:
+            data = json.load(f)
+            logger.info(f'old array metadata: {data}')
+            try:
+                del data['compressor']['checksum']
+            except KeyError:
+                logger.warning('No checksum found in compressor metadata')
+                
+        logger.info(f'new array metadata: {data}')
+        with open(path_to_zarray, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=3)
+
+        with open(path_to_zarray, 'r+') as f:
+            data = json.load(f)
+            
+    except Exception as e:
+        logger.error(f'FAILED to remove checksum in {path_to_zarray}: {e}')
+        raise

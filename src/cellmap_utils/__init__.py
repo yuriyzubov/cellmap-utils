@@ -15,7 +15,7 @@ from .airtable.supabase import (
 from .zarr import validate_ome, validate_roi_offset, get_matching_scale, recalibrate_offset
 from .airtable.upsert import upsert_image, upsert_record_scene_tables
 
-
+from .image import get_contrast_values
 
 
 __all__ = [
@@ -37,5 +37,7 @@ __all__ = [
     "validate_ome",
     "validate_roi_offset",
     "get_matching_scale",
-    "round_decimals"
+    "round_decimals",
+    "get_contrast_values"
+
 ]

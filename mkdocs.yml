@@ -33,6 +33,9 @@ nav:
     - API:
       - airtable: api/api_airtable.md
       - zarr: api/api_zarr.md
+      - image: api/api_image.md
+    - Changelog: ../CHANGELOG.md
+
 
 plugins:
 - mkdocstrings:
@@ -40,7 +43,7 @@ plugins:
         python:
           paths: ["./src"]
           options:
-            docstring_style: numpy
+            docstring_style: google
             members_order: source
             separate_signature: true
             filters: ["!^_"]

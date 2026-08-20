@@ -25,12 +25,20 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "fibsem_tools>=7.0.5",
   "fsspec>=2025.3.2",
   "numpy>=1.24.4",
   "pyairtable>=3.1.1",
   "pydantic>=2.11.3",
   "universal-pathlib>=0.2.5",
+  "zarr>=2.18",
+]
+
+[project.optional-dependencies]
+# needed only for repair_zarr_branch(), which targets legacy Zarr v2 stores.
+# pinned to zarr<3 upstream, so it is kept out of the core dependency set to
+# avoid conflicting with zarr3 (below).
+fibsem = [
+  "fibsem_tools>=7.0.5",
 ]
 
 [project.urls]

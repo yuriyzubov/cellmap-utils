@@ -4,7 +4,6 @@ import os
 from fsspec import filesystem
 from upath import UPath
 import sys
-from fibsem_tools import read
 
 
 def access_parent(node: zarr.Group | zarr.Array):
@@ -44,6 +43,8 @@ def repair_zarr_branch(input_zarr_path: str):
     Args:
         input_zarr_path (str): _description_
     """
+    from fibsem_tools import read
+
     try:
         zarr_path = input_zarr_path.rstrip("/ ")  # remove unnecessary '/' and ' '
         fs = get_file_system(zarr_path)

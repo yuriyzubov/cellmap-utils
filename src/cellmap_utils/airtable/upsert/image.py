@@ -1,12 +1,66 @@
 from typing import Tuple
 from pyairtable import api
 from pyairtable.formulas import match
-from fibsem_tools import read
 import os
 import zarr
 
 # upsert image record
 from typing import Literal
+
+# Zarr metadata file names that sometimes end up on the tail of a discovered
+# path (e.g. when paths come from a glob for "zarr.json"/".zarray"/".zgroup").
+_ZARR_METADATA_FILENAMES = {"zarr.json", ".zarray", ".zgroup", ".zattrs"}
+
+
+def _read_multiscale_group(image_path: str) -> Tuple[zarr.Group, str]:
+    """Open an OME-NGFF Zarr group and figure out which array holds the base (s0) scale.
+
+    Args:
+        image_path (str): path to either the multiscale group or one of its arrays.
+            A trailing Zarr metadata filename (e.g. "zarr.json") is stripped
+            off if present, since it points at a file, not a group/array root.
+
+    Returns:
+        Tuple[zarr.Group, str]: the multiscale group, and the name of the array to read.
+    """
+    if os.path.basename(image_path) in _ZARR_METADATA_FILENAMES:
+        image_path = os.path.dirname(image_path)
+
+    node = zarr.open(image_path, mode="r")
+    if isinstance(node, zarr.Group):
+        return node, "s0"
+
+    group_path, array_name = os.path.split(image_path)
+    return zarr.open_group(group_path, mode="r"), array_name
+
+
+def _get_scale_and_translation(zg: zarr.Group) -> Tuple[list, list]:
+    """Read the base (first) multiscale level's scale and translation from OME-NGFF metadata.
+
+    Supports both OME-NGFF 0.4 (Zarr v2 stores) and OME-NGFF 0.5 (Zarr v3 stores,
+    metadata nested under the "ome" key).
+
+    Args:
+        zg (zarr.Group): the multiscale group to read metadata from.
+
+    Returns:
+        Tuple[list, list]: (scale, translation) of the base (s0) level.
+    """
+    from ome_zarr_models import open_ome_zarr
+
+    ome_group = open_ome_zarr(zg)
+    multiscale_attrs = getattr(ome_group.attributes, "ome", ome_group.attributes)
+    dataset0 = multiscale_attrs.multiscales[0].datasets[0]
+
+    scale = next(
+        t.scale for t in dataset0.coordinateTransformations if t.type == "scale"
+    )
+    translation = next(
+        t.translation
+        for t in dataset0.coordinateTransformations
+        if t.type == "translation"
+    )
+    return scale, translation
 
 
 def upsert_image(
@@ -61,20 +115,8 @@ def upsert_image(
     else:
         value_type = "scalar"
 
-    input_zarr = read(image_path.rstrip("/"))
-    if isinstance(input_zarr, zarr.Group):
-        zg = input_zarr
-        z_arr_name = "s0"
-    else:
-        zg_path, z_arr_name = os.path.split(image_path.rstrip("/"))
-        zg = read(zg_path)
-
-    scale = zg.attrs["multiscales"][0]["datasets"][0]["coordinateTransformations"][0][
-        "scale"
-    ]
-    offset = zg.attrs["multiscales"][0]["datasets"][0]["coordinateTransformations"][1][
-        "translation"
-    ]
+    zg, z_arr_name = _read_multiscale_group(image_path.rstrip("/"))
+    scale, offset = _get_scale_and_translation(zg)
     shape = zg[z_arr_name].shape
 
     try:

@@ -86,6 +86,10 @@ def get_image_record(image_path: str, ds_name: str, at_api: api):
         pub_name = "Segmentations"
         image_stack = f"{ds_name}_{name}"
 
+    if image_record["fields"]["image_type"] == "human_segmentation":
+        doi_field = "doi_link_dataset_crop"
+    else:
+        doi_field = "doi_link_dataset"
 
     print(image_record)
     supa_image = SupaImageModel(
@@ -111,7 +115,7 @@ def get_image_record(image_path: str, ds_name: str, at_api: api):
         grid_index_order="C",
         stage="dev",
         image_stack=image_stack,
-        doi={"url": image_record["fields"]["doi_link_dataset"][0], "name": pub_name},
+        doi={"url": image_record["fields"][doi_field][0], "name": pub_name},
     )
 
     return supa_image

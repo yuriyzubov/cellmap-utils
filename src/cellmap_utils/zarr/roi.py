@@ -1,6 +1,10 @@
 import zarr
+import copy
+import logging
 from typing import Tuple
 from cellmap_utils.zarr.metadata import get_s0_level, _read_multiscale_datasets, _scale_and_translation
+
+logger = logging.getLogger(__name__)
 
 
 def get_matching_scale(dataset : zarr.Group,
@@ -65,6 +69,67 @@ def get_normalized_scale(reference : zarr.Group,
     raise ValueError(
         f"Could not find a reference level with shape matching dataset level '{dataset_level}' shape {ds_shape}"
     )
+
+
+def apply_normalized_scale(
+    dataset: zarr.Group,
+    dataset_level: str,
+    normalized: dict,
+    dry_run: bool = True,
+) -> list:
+    """Write a corrected scale into a dataset's OME-NGFF metadata.
+
+    Use this after get_normalized_scale() to save its result. Only the scale
+    for dataset_level changes. The translation already in the dataset's
+    metadata is not touched.
+
+    Supports both OME-NGFF 0.4 (top-level "multiscales" attrs key) and
+    OME-NGFF 0.5 ("ome" -> "multiscales" attrs key).
+
+    Args:
+        dataset (zarr.Group): dataset zarr group to update.
+        dataset_level (str): path of the level to update. Example: 's0'.
+        normalized (dict): output of get_normalized_scale(). Must have a
+            'scale' key.
+        dry_run (bool, optional): if True (default), compute the updated
+            metadata but do not write it to the group's attrs.
+
+    Returns:
+        list: the full 'multiscales' metadata that was written, or that
+            would have been written if dry_run is True.
+
+    Raises:
+        ValueError: if dataset_level is not present in the dataset's
+            metadata.
+    """
+    attrs = dict(dataset.attrs)
+    is_v05 = "ome" in attrs
+    root = attrs["ome"] if is_v05 else attrs
+    multiscales = copy.deepcopy(root["multiscales"])
+
+    ms_levels = multiscales[0]["datasets"]
+    level_entry = next((lvl for lvl in ms_levels if lvl["path"] == dataset_level), None)
+    if level_entry is None:
+        raise ValueError(f"Dataset does not have a level named '{dataset_level}'")
+
+    scale_transform = next(
+        t for t in level_entry["coordinateTransformations"] if t["type"] == "scale"
+    )
+    scale_transform["scale"] = list(normalized["scale"])
+
+    if dry_run:
+        logger.info(
+            f"[dry_run] would set scale for level '{dataset_level}' of "
+            f"{dataset.path} to {normalized['scale']}"
+        )
+    elif is_v05:
+        new_ome = copy.deepcopy(attrs["ome"])
+        new_ome["multiscales"] = multiscales
+        dataset.attrs["ome"] = new_ome
+    else:
+        dataset.attrs["multiscales"] = multiscales
+
+    return multiscales
 
 
 def recalibrate_offset(roi: zarr.Group, grid_spacing : list[float]) -> Tuple[list[float], list[float]]:

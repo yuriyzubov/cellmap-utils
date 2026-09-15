@@ -1,6 +1,6 @@
 import pytest
 
-from cellmap_utils.zarr.roi import get_matching_scale, get_normalized_scale
+from cellmap_utils.zarr.roi import apply_normalized_scale, get_matching_scale, get_normalized_scale
 
 
 def test_get_matching_scale_finds_roi_level_matching_dataset_s0(make_multiscale_group, ome_version):
@@ -112,3 +112,56 @@ def test_get_normalized_scale_unknown_dataset_level_raises(make_multiscale_group
 
     with pytest.raises(ValueError):
         get_normalized_scale(reference, dataset, dataset_level="s1")
+
+
+def _stored_scale(group, ome_version, level="s0"):
+    attrs = dict(group.attrs)
+    root = attrs["ome"] if ome_version == "0.5" else attrs
+    ms_levels = root["multiscales"][0]["datasets"]
+    level_entry = next(lvl for lvl in ms_levels if lvl["path"] == level)
+    return next(t["scale"] for t in level_entry["coordinateTransformations"] if t["type"] == "scale")
+
+
+def test_apply_normalized_scale_dry_run_does_not_write(make_multiscale_group, reference, ome_version):
+    dataset = make_multiscale_group(
+        voxel_sizes=[[6.0, 6.0, 6.0]],
+        shapes=[(100, 100, 100)],
+        translation=[10.0, 20.0, 30.0],
+        name="segmentation_dry_run",
+        ome_version=ome_version,
+    )
+
+    normalized = get_normalized_scale(reference, dataset)
+    result = apply_normalized_scale(dataset, "s0", normalized, dry_run=True)
+
+    assert result[0]["datasets"][0]["coordinateTransformations"][0]["scale"] == [12.0, 12.0, 12.0]
+    # the group's own stored attrs must be unchanged
+    assert _stored_scale(dataset, ome_version) == [6.0, 6.0, 6.0]
+
+
+def test_apply_normalized_scale_writes_corrected_scale(make_multiscale_group, reference, ome_version):
+    dataset = make_multiscale_group(
+        voxel_sizes=[[6.0, 6.0, 6.0]],
+        shapes=[(100, 100, 100)],
+        translation=[10.0, 20.0, 30.0],
+        name="segmentation_write",
+        ome_version=ome_version,
+    )
+
+    normalized = get_normalized_scale(reference, dataset)
+    apply_normalized_scale(dataset, "s0", normalized, dry_run=False)
+
+    assert _stored_scale(dataset, ome_version) == [12.0, 12.0, 12.0]
+
+
+def test_apply_normalized_scale_unknown_level_raises(make_multiscale_group, ome_version):
+    dataset = make_multiscale_group(
+        voxel_sizes=[[6.0, 6.0, 6.0]],
+        shapes=[(100, 100, 100)],
+        translation=[0.0, 0.0, 0.0],
+        name="segmentation_unknown_apply_level",
+        ome_version=ome_version,
+    )
+
+    with pytest.raises(ValueError):
+        apply_normalized_scale(dataset, "s5", {"scale": [1.0, 1.0, 1.0]}, dry_run=True)

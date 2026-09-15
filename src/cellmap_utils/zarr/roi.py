@@ -26,6 +26,47 @@ def get_matching_scale(dataset : zarr.Group,
     raise ValueError("Could not find ROI scale values that matches with s0 level of the dataset")
 
 
+def get_normalized_scale(reference : zarr.Group,
+                          dataset : zarr.Group,
+                          dataset_level : str = 's0') -> dict:
+    """Correct a dataset's voxel size to match the reference pyramid level that has the same array shape.
+
+    This is useful when a dataset (for example, a segmentation) was labeled with the wrong
+    voxel size, but its array shape matches one of the levels of a trusted reference multiscale
+    image. The scale of the matching reference level is treated as the correct voxel size for the
+    dataset. The dataset's translation (offset) is not changed, because translation already stores
+    an absolute physical position in nanometers, and does not depend on the scale label.
+
+    Supports both OME-NGFF 0.4 (Zarr v2 stores) and OME-NGFF 0.5 (Zarr v3 stores).
+    Requires the optional 'zarr3' extra (ome-zarr-models).
+
+    Args:
+        reference (zarr.Group): reference zarr group with a multiscale pyramid.
+        dataset (zarr.Group): dataset zarr group to normalize, for example a segmentation.
+        dataset_level (str, optional): path of the dataset level to normalize. Defaults to 's0'.
+
+    Returns:
+        dict: {'scale': matched reference scale, 'translation': dataset's own translation, unchanged}
+    """
+
+    ds_levels = {level.path: level for level in _read_multiscale_datasets(dataset)}
+    if dataset_level not in ds_levels:
+        raise ValueError(f"Dataset does not have a level named '{dataset_level}'")
+    _, ds_translation = _scale_and_translation(ds_levels[dataset_level])
+
+    ds_shape = list(dataset[dataset_level].shape)
+
+    for level in _read_multiscale_datasets(reference):
+        ref_shape = list(reference[level.path].shape)
+        if ref_shape == ds_shape:
+            matched_scale, _ = _scale_and_translation(level)
+            return {'scale': matched_scale, 'translation': ds_translation}
+
+    raise ValueError(
+        f"Could not find a reference level with shape matching dataset level '{dataset_level}' shape {ds_shape}"
+    )
+
+
 def recalibrate_offset(roi: zarr.Group, grid_spacing : list[float]) -> Tuple[list[float], list[float]]:
     """The offset of the roi at multiscale level with scale=grid_spacing must be divisible by grid_spacing.
         This method would recalibrate offset, if roi grid does not align with grid {scale : grid_spacing, translation : [0.0, 0.0, 0.0]}  

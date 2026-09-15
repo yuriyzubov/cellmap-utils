@@ -4,6 +4,8 @@ from pyairtable.formulas import match
 import os
 import zarr
 
+from cellmap_utils.zarr.metadata import get_s0_level
+
 # upsert image record
 from typing import Literal
 
@@ -32,35 +34,6 @@ def _read_multiscale_group(image_path: str) -> Tuple[zarr.Group, str]:
 
     group_path, array_name = os.path.split(image_path)
     return zarr.open_group(group_path, mode="r"), array_name
-
-
-def _get_scale_and_translation(zg: zarr.Group) -> Tuple[list, list]:
-    """Read the base (first) multiscale level's scale and translation from OME-NGFF metadata.
-
-    Supports both OME-NGFF 0.4 (Zarr v2 stores) and OME-NGFF 0.5 (Zarr v3 stores,
-    metadata nested under the "ome" key).
-
-    Args:
-        zg (zarr.Group): the multiscale group to read metadata from.
-
-    Returns:
-        Tuple[list, list]: (scale, translation) of the base (s0) level.
-    """
-    from ome_zarr_models import open_ome_zarr
-
-    ome_group = open_ome_zarr(zg)
-    multiscale_attrs = getattr(ome_group.attributes, "ome", ome_group.attributes)
-    dataset0 = multiscale_attrs.multiscales[0].datasets[0]
-
-    scale = next(
-        t.scale for t in dataset0.coordinateTransformations if t.type == "scale"
-    )
-    translation = next(
-        t.translation
-        for t in dataset0.coordinateTransformations
-        if t.type == "translation"
-    )
-    return scale, translation
 
 
 def upsert_image(
@@ -116,7 +89,7 @@ def upsert_image(
         value_type = "scalar"
 
     zg, z_arr_name = _read_multiscale_group(image_path.rstrip("/"))
-    scale, offset = _get_scale_and_translation(zg)
+    scale, offset = get_s0_level(zg)
     shape = zg[z_arr_name].shape
 
     try:
@@ -152,7 +125,7 @@ def upsert_image(
         "offset_y_nm": offset[1],
         "offset_z_nm": offset[0],
         "fibsem_imaging": fibsem_imaging,
-        "challenge" : challenge, 
+        "challenge" : challenge,
         "annotation": annotation,
     }
 

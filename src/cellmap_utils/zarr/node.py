@@ -43,8 +43,6 @@ def repair_zarr_branch(input_zarr_path: str):
     Args:
         input_zarr_path (str): _description_
     """
-    from fibsem_tools import read
-
     try:
         zarr_path = input_zarr_path.rstrip("/ ")  # remove unnecessary '/' and ' '
         fs = get_file_system(zarr_path)
@@ -55,7 +53,7 @@ def repair_zarr_branch(input_zarr_path: str):
     z_store, z_path = zarr_path.split(".zarr")
 
     try:
-        read(zarr_path)
+        zarr.open_group(zarr_path, mode="r")
     except:
         print("not found, added .zgroup to: ", zarr_path)
         with fs.open(UPath(os.path.join(zarr_path, ".zgroup")), mode="w") as f:

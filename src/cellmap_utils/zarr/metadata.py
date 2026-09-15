@@ -185,11 +185,17 @@ def get_multiscale_metadata(
     return z_attrs
 
 
-def ome_ngff_only(zg: zarr.Group):
+def ome_ngff_only(zg: zarr.Group, dry_run: bool = False) -> list:
     """Delete all attrs from .zattrs that are not part of the OME-NGFF Zarr spec and CellMap metadata.
 
     Args:
         zg (zarr.Group): zarr group that contains multiscale metadata.
+        dry_run (bool, optional): if True, compute which attrs would be deleted
+            but do not delete them. Defaults to False.
+
+    Returns:
+        list: the attr names that were deleted (or would have been deleted, if
+            dry_run is True).
     """
     to_keep = [
         "multiscales",
@@ -202,8 +208,13 @@ def ome_ngff_only(zg: zarr.Group):
     ]
     to_delete_attrs = [attr for attr in list(zg.attrs) if attr not in to_keep]
 
-    for attr_name in to_delete_attrs:
-        zg.attrs.__delitem__(attr_name)
+    if dry_run:
+        logger.info(f"[dry_run] would delete attrs {to_delete_attrs} from {zg.path}")
+    else:
+        for attr_name in to_delete_attrs:
+            zg.attrs.__delitem__(attr_name)
+
+    return to_delete_attrs
 
 
 def round_decimals(group : zarr.Group, decimals : int):

@@ -16,7 +16,8 @@ def insert_omero_metadata(
     window_end: int = None,
     id: int = None,
     name: str = None,
-):
+    dry_run: bool = False,
+) -> dict:
     """
     Insert or update missing omero transitional metadata into .zattrs metadata of parent group for the input zarr array.
 
@@ -29,6 +30,12 @@ def insert_omero_metadata(
         window_end (int, optional): Contrast max value. Defaults to None.
         id (int, optional): Defaults to None.
         name (str, optional): Name of the dataset. Defaults to None.
+        dry_run (bool, optional): if True, compute the omero metadata but do not
+            write it to the group's attrs. Defaults to False.
+
+    Returns:
+        dict: the omero metadata that was written (or would have been written, if
+            dry_run is True).
     """
 
     store_path, zarr_path = separate_store_path(src, "")
@@ -71,7 +78,13 @@ def insert_omero_metadata(
         "defaultZ": int(z_arr.shape[0] / 2),
         "model": "greyscale",
     }
-    parent_group.attrs["omero"] = omero
+
+    if dry_run:
+        logger.info(f"[dry_run] would write omero metadata to {parent_group.path}: {omero}")
+    else:
+        parent_group.attrs["omero"] = omero
+
+    return omero
 
 
 def get_single_scale_metadata(

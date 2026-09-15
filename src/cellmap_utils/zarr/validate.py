@@ -1,15 +1,44 @@
 import zarr
-import ngff_zarr as nz
+from typing import Optional
 from cellmap_utils.zarr.metadata import get_s0_level
 from cellmap_utils.zarr.roi import recalibrate_offset
 
-def validate_ome(zg : zarr.Group):
-    """thin wrapper method for ngff_zarr.validate. 
+def is_valid_ome(zg : zarr.Group, version : Optional[str] = None) -> bool:
+    """Check whether a zarr group's OME-NGFF metadata validates, without raising.
+
+    Supports both OME-NGFF 0.4 (Zarr v2 stores) and OME-NGFF 0.5 (Zarr v3 stores).
+    Requires the optional 'zarr3' extra (ome-zarr-models).
 
     Args:
-        zg (zarr.Group): the input zarr group with a json schema to validate.
+        zg (zarr.Group): the zarr group to check.
+        version (str, optional): restrict the check to a specific OME-NGFF version
+            ('0.4', '0.5', or '0.6'). Defaults to None, which tries every version.
+
+    Returns:
+        bool: True if the metadata validates against a known OME-NGFF model, False otherwise.
     """
-    nz.validate(ngff_dict = dict(zg.attrs), version='0.4', model='image', strict=False)
+    from ome_zarr_models import open_ome_zarr
+
+    try:
+        open_ome_zarr(zg, version=version)
+        return True
+    except RuntimeError:
+        return False
+
+def validate_ome(zg : zarr.Group):
+    """Validate that a zarr group has well-formed OME-NGFF multiscale metadata.
+
+    Supports both OME-NGFF 0.4 (Zarr v2 stores) and OME-NGFF 0.5 (Zarr v3 stores).
+    Requires the optional 'zarr3' extra (ome-zarr-models). Raises if the metadata
+    does not validate against any known OME-NGFF version. Use `is_valid_ome()`
+    instead if you want a boolean result rather than an exception.
+
+    Args:
+        zg (zarr.Group): the input zarr group to validate.
+    """
+    from ome_zarr_models import open_ome_zarr
+
+    open_ome_zarr(zg)
     
 def validate_roi_offset(dataset : zarr.Group, roi : zarr.Group):
     

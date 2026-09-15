@@ -16,7 +16,8 @@ def insert_omero_metadata(
     window_end: int = None,
     id: int = None,
     name: str = None,
-):
+    dry_run: bool = False,
+) -> dict:
     """
     Insert or update missing omero transitional metadata into .zattrs metadata of parent group for the input zarr array.
 
@@ -29,6 +30,12 @@ def insert_omero_metadata(
         window_end (int, optional): Contrast max value. Defaults to None.
         id (int, optional): Defaults to None.
         name (str, optional): Name of the dataset. Defaults to None.
+        dry_run (bool, optional): if True, compute the omero metadata but do not
+            write it to the group's attrs. Defaults to False.
+
+    Returns:
+        dict: the omero metadata that was written (or would have been written, if
+            dry_run is True).
     """
 
     store_path, zarr_path = separate_store_path(src, "")
@@ -71,7 +78,13 @@ def insert_omero_metadata(
         "defaultZ": int(z_arr.shape[0] / 2),
         "model": "greyscale",
     }
-    parent_group.attrs["omero"] = omero
+
+    if dry_run:
+        logger.info(f"[dry_run] would write omero metadata to {parent_group.path}: {omero}")
+    else:
+        parent_group.attrs["omero"] = omero
+
+    return omero
 
 
 def get_single_scale_metadata(
@@ -172,11 +185,17 @@ def get_multiscale_metadata(
     return z_attrs
 
 
-def ome_ngff_only(zg: zarr.Group):
+def ome_ngff_only(zg: zarr.Group, dry_run: bool = False) -> list:
     """Delete all attrs from .zattrs that are not part of the OME-NGFF Zarr spec and CellMap metadata.
 
     Args:
         zg (zarr.Group): zarr group that contains multiscale metadata.
+        dry_run (bool, optional): if True, compute which attrs would be deleted
+            but do not delete them. Defaults to False.
+
+    Returns:
+        list: the attr names that were deleted (or would have been deleted, if
+            dry_run is True).
     """
     to_keep = [
         "multiscales",
@@ -189,20 +208,34 @@ def ome_ngff_only(zg: zarr.Group):
     ]
     to_delete_attrs = [attr for attr in list(zg.attrs) if attr not in to_keep]
 
-    for attr_name in to_delete_attrs:
-        zg.attrs.__delitem__(attr_name)
-        
-        
-def round_decimals(group : zarr.Group, decimals : int):
+    if dry_run:
+        logger.info(f"[dry_run] would delete attrs {to_delete_attrs} from {zg.path}")
+    else:
+        for attr_name in to_delete_attrs:
+            zg.attrs.__delitem__(attr_name)
+
+    return to_delete_attrs
+
+
+def round_decimals(group : zarr.Group, decimals : int, dry_run : bool = False) -> list:
     """Round scale and translation metadata
 
     Args:
         group (zarr.Group): zarr group with ome-zarr metadata
         decimals (int): number of decimals to round
+        dry_run (bool, optional): if True, compute the rounded metadata but do not
+            write it back to the group's attrs. Defaults to False.
+
+    Returns:
+        list: the rounded 'multiscales' metadata that was written (or would have
+            been written, if dry_run is True).
     """
+    import copy
+
     z_attrs = dict()
-    z_attrs['multiscales'] = group.attrs['multiscales']
-    
+    # deep copy: avoids writing through to the store in dry_run mode
+    z_attrs['multiscales'] = copy.deepcopy(group.attrs['multiscales'])
+
     # multiscale levels
     ms_levels = z_attrs['multiscales'][0]['datasets']
     for level in ms_levels:
@@ -210,21 +243,125 @@ def round_decimals(group : zarr.Group, decimals : int):
         translation = level['coordinateTransformations'][1]['translation']
         level['coordinateTransformations'][0]['scale'] = [round(sc, decimals) for sc in scale]
         level['coordinateTransformations'][1]['translation'] = [round(tr, decimals) for tr in translation]
-    group.attrs['multiscales'] = z_attrs['multiscales']
-    
-def get_s0_level(zg : zarr.Group) -> Tuple[list[float],list[float]]:
-    level_0 = zg.attrs['multiscales'][0]['datasets'][0]['coordinateTransformations']
-    return (level_0[0]['scale'], level_0[1]['translation'])
+
+    if dry_run:
+        logger.info(f"[dry_run] would write rounded multiscales metadata to {group.path}: {z_attrs['multiscales']}")
+    else:
+        group.attrs['multiscales'] = z_attrs['multiscales']
+
+    return z_attrs['multiscales']
+
+def _read_multiscale_datasets(zg: zarr.Group):
+    """Read and validate OME-NGFF multiscale dataset entries.
+
+    Supports both OME-NGFF 0.4 (Zarr v2 stores) and OME-NGFF 0.5 (Zarr v3 stores,
+    metadata nested under the "ome" key). Requires the optional 'zarr3' extra
+    (ome-zarr-models).
+
+    Args:
+        zg (zarr.Group): zarr group with OME-NGFF multiscale metadata.
+
+    Returns:
+        A sequence of validated dataset entries, one per pyramid level. Each entry
+        exposes a `.path` and a `.coordinateTransformations` attribute.
+    """
+    from ome_zarr_models import open_ome_zarr
+
+    ome_group = open_ome_zarr(zg)
+    multiscale_attrs = getattr(ome_group.attributes, "ome", ome_group.attributes)
+    return multiscale_attrs.multiscales[0].datasets
 
 
-def remove_checksum(path_to_arr: str):
+def _read_multiscale_datasets_raw(zg: zarr.Group) -> list:
+    """Best-effort read of multiscale dataset entries directly from zarr attrs, with no
+    schema validation.
+
+    Use this only as a fallback when `_read_multiscale_datasets` fails and some
+    metadata is still preferable to an exception. It trusts the attrs to have the
+    expected shape and does not check that the values it finds (scale, translation,
+    units, etc.) are actually well-formed.
+
+    Supports both the OME-NGFF 0.4 attrs layout (top-level "multiscales") and the
+    0.5 layout ("ome" -> "multiscales").
+
+    Args:
+        zg (zarr.Group): zarr group to read.
+
+    Returns:
+        list: raw dataset entries (plain dicts), one per pyramid level.
+
+    Raises:
+        KeyError: if no recognizable "multiscales" structure is present at all.
+    """
+    attrs = dict(zg.attrs)
+    multiscale_attrs = attrs.get("ome", attrs)
+    return multiscale_attrs["multiscales"][0]["datasets"]
+
+
+def _scale_and_translation(dataset) -> Tuple[list, list]:
+    """Extract scale and translation from a multiscale dataset entry.
+
+    Args:
+        dataset: a dataset entry, either a validated object (from
+            `_read_multiscale_datasets`) or a raw dict (from
+            `_read_multiscale_datasets_raw`).
+
+    Returns:
+        Tuple[list, list]: (scale, translation)
+    """
+    if isinstance(dataset, dict):
+        transforms = dataset["coordinateTransformations"]
+        scale = next(t["scale"] for t in transforms if t["type"] == "scale")
+        translation = next(t["translation"] for t in transforms if t["type"] == "translation")
+        return scale, translation
+
+    scale = next(t.scale for t in dataset.coordinateTransformations if t.type == "scale")
+    translation = next(
+        t.translation for t in dataset.coordinateTransformations if t.type == "translation"
+    )
+    return scale, translation
+
+
+def get_s0_level(zg : zarr.Group, strict : bool = True) -> Tuple[list[float],list[float]]:
+    """Read the base (s0) level's scale and translation.
+
+    Supports both OME-NGFF 0.4 (Zarr v2 stores) and OME-NGFF 0.5 (Zarr v3 stores).
+    Requires the optional 'zarr3' extra (ome-zarr-models).
+
+    Args:
+        zg (zarr.Group): zarr group with OME-NGFF multiscale metadata.
+        strict (bool, optional): if True (default), require full OME-NGFF schema
+            validation, and raise if it fails. If False, fall back to a best-effort,
+            unvalidated read of the attrs when schema validation fails, instead of
+            raising. Defaults to True.
+
+    Returns:
+        Tuple[list[float], list[float]]: (scale, translation) of the s0 level.
+    """
+    if strict:
+        datasets = _read_multiscale_datasets(zg)
+    else:
+        try:
+            datasets = _read_multiscale_datasets(zg)
+        except RuntimeError:
+            datasets = _read_multiscale_datasets_raw(zg)
+    return _scale_and_translation(datasets[0])
+
+
+def remove_checksum(path_to_arr: str, dry_run: bool = False) -> dict:
     """Remove checksum parameter from zarr array metadata, to make it compatible with tensorstore.
-    
+
     Args:
         path_to_arr (str): path to Zarr array
+        dry_run (bool, optional): if True, compute the corrected metadata but do
+            not write it back to the .zarray file. Defaults to False.
+
+    Returns:
+        dict: the array metadata with the checksum removed (or that would have
+            been written, if dry_run is True).
     """
     import json
-    
+
     try:
         path_to_zarray = os.path.join(path_to_arr, '.zarray')
         with open(path_to_zarray, 'r+') as f:
@@ -234,14 +371,20 @@ def remove_checksum(path_to_arr: str):
                 del data['compressor']['checksum']
             except KeyError:
                 logger.warning('No checksum found in compressor metadata')
-                
+
+        if dry_run:
+            logger.info(f'[dry_run] would write new array metadata to {path_to_zarray}: {data}')
+            return data
+
         logger.info(f'new array metadata: {data}')
         with open(path_to_zarray, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=3)
 
         with open(path_to_zarray, 'r+') as f:
             data = json.load(f)
-            
+
+        return data
+
     except Exception as e:
         logger.error(f'FAILED to remove checksum in {path_to_zarray}: {e}')
         raise

@@ -47,6 +47,11 @@ Documentation = "https://github.com/U.N. Owen/cellmap-utils#readme"
 Issues = "https://github.com/U.N. Owen/cellmap-utils/issues"
 Source = "https://github.com/U.N. Owen/cellmap-utils"
 
+[dependency-groups]
+test = [
+  "pytest>=8",
+]
+
 [tool.hatch.version]
 path = "src/cellmap_utils/__about__.py"
 

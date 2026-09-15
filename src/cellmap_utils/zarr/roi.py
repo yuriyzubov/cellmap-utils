@@ -1,22 +1,28 @@
 import zarr
 from typing import Tuple
-import ngff_zarr as nz
-from cellmap_utils.zarr.metadata import get_s0_level
-    
-    
+from cellmap_utils.zarr.metadata import get_s0_level, _read_multiscale_datasets, _scale_and_translation
+
+
 def get_matching_scale(dataset : zarr.Group,
                        roi : zarr.Group) -> Tuple[list[float], list[float]]:
-    
-    
-    nz.validate(ngff_dict = dict(roi.attrs), version='0.4', model='image', strict=False)
-    nz.validate(ngff_dict = dict(dataset.attrs), version='0.4', model='image', strict=False)
-    s0_ds = dataset.attrs['multiscales'][0]['datasets'][0]['coordinateTransformations']
-    
-    for level in roi.attrs['multiscales'][0]['datasets']:
-        scale = level['coordinateTransformations'][0]['scale']
-        if scale==s0_ds[0]['scale']:
-            offset = level['coordinateTransformations'][1]['translation']
-            return (scale, offset)
+    """Find the roi pyramid level whose scale matches the dataset's s0 scale.
+
+    Supports both OME-NGFF 0.4 (Zarr v2 stores) and OME-NGFF 0.5 (Zarr v3 stores).
+    Requires the optional 'zarr3' extra (ome-zarr-models).
+
+    Args:
+        dataset (zarr.Group): dataset zarr group with a multiscale pyramid.
+        roi (zarr.Group): roi zarr group with a multiscale pyramid.
+
+    Returns:
+        Tuple[list[float], list[float]]: (matching roi scale, matching roi translation)
+    """
+    ds_scale, _ = get_s0_level(dataset)
+
+    for level in _read_multiscale_datasets(roi):
+        scale, translation = _scale_and_translation(level)
+        if scale == ds_scale:
+            return (scale, translation)
     raise ValueError("Could not find ROI scale values that matches with s0 level of the dataset")
 
 

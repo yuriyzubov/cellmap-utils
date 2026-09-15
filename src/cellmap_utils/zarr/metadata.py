@@ -348,11 +348,17 @@ def get_s0_level(zg : zarr.Group, strict : bool = True) -> Tuple[list[float],lis
     return _scale_and_translation(datasets[0])
 
 
-def remove_checksum(path_to_arr: str):
+def remove_checksum(path_to_arr: str, dry_run: bool = False) -> dict:
     """Remove checksum parameter from zarr array metadata, to make it compatible with tensorstore.
 
     Args:
         path_to_arr (str): path to Zarr array
+        dry_run (bool, optional): if True, compute the corrected metadata but do
+            not write it back to the .zarray file. Defaults to False.
+
+    Returns:
+        dict: the array metadata with the checksum removed (or that would have
+            been written, if dry_run is True).
     """
     import json
 
@@ -366,12 +372,18 @@ def remove_checksum(path_to_arr: str):
             except KeyError:
                 logger.warning('No checksum found in compressor metadata')
 
+        if dry_run:
+            logger.info(f'[dry_run] would write new array metadata to {path_to_zarray}: {data}')
+            return data
+
         logger.info(f'new array metadata: {data}')
         with open(path_to_zarray, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=3)
 
         with open(path_to_zarray, 'r+') as f:
             data = json.load(f)
+
+        return data
 
     except Exception as e:
         logger.error(f'FAILED to remove checksum in {path_to_zarray}: {e}')

@@ -7,5 +7,5 @@ from .metadata import (
 )
 from .store import separate_store_path
 from .node import access_parent, repair_zarr_branch
-from .validate import validate_ome, validate_roi_offset
-from .roi import get_matching_scale, recalibrate_offset
+from .validate import is_valid_ome, validate_ome, validate_roi_offset
+from .roi import apply_normalized_scale, get_matching_scale, get_normalized_scale, recalibrate_offset

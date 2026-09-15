@@ -217,15 +217,24 @@ def ome_ngff_only(zg: zarr.Group, dry_run: bool = False) -> list:
     return to_delete_attrs
 
 
-def round_decimals(group : zarr.Group, decimals : int):
+def round_decimals(group : zarr.Group, decimals : int, dry_run : bool = False) -> list:
     """Round scale and translation metadata
 
     Args:
         group (zarr.Group): zarr group with ome-zarr metadata
         decimals (int): number of decimals to round
+        dry_run (bool, optional): if True, compute the rounded metadata but do not
+            write it back to the group's attrs. Defaults to False.
+
+    Returns:
+        list: the rounded 'multiscales' metadata that was written (or would have
+            been written, if dry_run is True).
     """
+    import copy
+
     z_attrs = dict()
-    z_attrs['multiscales'] = group.attrs['multiscales']
+    # deep copy: avoids writing through to the store in dry_run mode
+    z_attrs['multiscales'] = copy.deepcopy(group.attrs['multiscales'])
 
     # multiscale levels
     ms_levels = z_attrs['multiscales'][0]['datasets']
@@ -234,7 +243,13 @@ def round_decimals(group : zarr.Group, decimals : int):
         translation = level['coordinateTransformations'][1]['translation']
         level['coordinateTransformations'][0]['scale'] = [round(sc, decimals) for sc in scale]
         level['coordinateTransformations'][1]['translation'] = [round(tr, decimals) for tr in translation]
-    group.attrs['multiscales'] = z_attrs['multiscales']
+
+    if dry_run:
+        logger.info(f"[dry_run] would write rounded multiscales metadata to {group.path}: {z_attrs['multiscales']}")
+    else:
+        group.attrs['multiscales'] = z_attrs['multiscales']
+
+    return z_attrs['multiscales']
 
 def _read_multiscale_datasets(zg: zarr.Group):
     """Read and validate OME-NGFF multiscale dataset entries.

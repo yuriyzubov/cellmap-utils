@@ -45,7 +45,8 @@ def upsert_image(
     image_type: Literal["human_segmentation", "em"],
     institution: str = "HHMI / Janelia Research Campus",
     challenge : bool = False,
-):
+    dry_run : bool = False,
+) -> dict:
     """Upsert a record to airtable image table.
 
     Args:
@@ -58,9 +59,17 @@ def upsert_image(
         collection_table (api.table.Table): collation airtable object to create references.
         fibsem_table (api.table.Table): fibsem_imaging airtable object to create references.
         annotation_table (api.table.Table): annotation airtable object to create references.
+        dry_run (bool, optional): if True, compute the record that would be
+            created/updated, but do not call Airtable's create/update. Defaults
+            to False.
 
     Raises:
         ValueError: raise value error if multiple records with the same location and name are found in the image table.
+
+    Returns:
+        dict: the record that was upserted, in the same shape returned by
+            pyairtable (``{'id': ..., 'fields': ...}``). When dry_run is True, no
+            record is actually created/updated, so 'id' is None.
     """
 
     image_table = at_api.table(
@@ -132,7 +141,12 @@ def upsert_image(
     if len(existing_records) > 2:
         raise ValueError("Multiple records with matching input image name found")
 
+    if dry_run:
+        action = "update" if existing_records else "create"
+        print(f"[dry_run] would {action} image record: {record_to_upsert}")
+        return {"id": None, "fields": record_to_upsert}
+
     if not existing_records:
-        image_table.create(record_to_upsert)
+        return image_table.create(record_to_upsert)
     elif len(existing_records) == 1:
-        image_table.update(existing_records[0]["id"], record_to_upsert)
+        return image_table.update(existing_records[0]["id"], record_to_upsert)

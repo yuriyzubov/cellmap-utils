@@ -36,12 +36,18 @@ def get_file_system(path):
     return filesystem(p.protocol, **p.storage_options)
 
 
-def repair_zarr_branch(input_zarr_path: str):
+def repair_zarr_branch(input_zarr_path: str, dry_run: bool = False) -> list:
     """A recursive methond that adds missing .zgroup file in any parent zarr group
        between input zarr group and root of the zarr container.
 
     Args:
         input_zarr_path (str): _description_
+        dry_run (bool, optional): if True, only report which paths are missing a
+            .zgroup file, without writing anything. Defaults to False.
+
+    Returns:
+        list: paths that had a .zgroup file written (or that would have, if
+            dry_run is True).
     """
     try:
         zarr_path = input_zarr_path.rstrip("/ ")  # remove unnecessary '/' and ' '
@@ -52,14 +58,24 @@ def repair_zarr_branch(input_zarr_path: str):
 
     z_store, z_path = zarr_path.split(".zarr")
 
+    repaired = []
     try:
         zarr.open_group(zarr_path, mode="r")
     except:
-        print("not found, added .zgroup to: ", zarr_path)
-        with fs.open(UPath(os.path.join(zarr_path, ".zgroup")), mode="w") as f:
-            f.write(str({"zarr_format": 2}).replace("'", '"'))
+        if dry_run:
+            print("[dry_run] not found, would add .zgroup to: ", zarr_path)
+        else:
+            print("not found, added .zgroup to: ", zarr_path)
+            with fs.open(UPath(os.path.join(zarr_path, ".zgroup")), mode="w") as f:
+                f.write(str({"zarr_format": 2}).replace("'", '"'))
+        repaired.append(zarr_path)
 
     if z_path.lstrip("/ ").rstrip("/ ") != "":
-        repair_zarr_branch(
-            os.path.join(f"{z_store}.zarr", os.path.split(z_path)[0].lstrip("/"))
+        repaired.extend(
+            repair_zarr_branch(
+                os.path.join(f"{z_store}.zarr", os.path.split(z_path)[0].lstrip("/")),
+                dry_run=dry_run,
+            )
         )
+
+    return repaired

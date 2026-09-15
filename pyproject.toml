@@ -7,7 +7,7 @@ name = "cellmap-utils"
 dynamic = ["version"]
 description = ''
 readme = "README.md"
-requires-python = ">=3.8.10"
+requires-python = ">=3.11"
 license = "MIT"
 keywords = []
 authors = [

@@ -7,7 +7,7 @@ name = "cellmap-utils"
 dynamic = ["version"]
 description = ''
 readme = "README.md"
-requires-python = ">=3.8.10"
+requires-python = ">=3.11"
 license = "MIT"
 keywords = []
 authors = [
@@ -34,15 +34,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# needed only for repair_zarr_branch(), which targets legacy Zarr v2 stores.
-# pinned to zarr<3 upstream, so it is kept out of the core dependency set to
-# avoid conflicting with zarr3 (below).
-fibsem = [
-  "fibsem_tools>=7.0.5",
-]
-# needed for reading OME-NGFF metadata from Zarr v3 (zarr.json) stores, as
-# used by upsert_image(). Requires zarr>=3.1.1, so keep it out of core deps
-# to avoid conflicting with fibsem (above) in the same environment.
+# needed for validating/reading OME-NGFF metadata (both 0.4 and 0.5) via
+# ome_zarr_models, as used by upsert_image() and the cellmap_utils.zarr.roi /
+# cellmap_utils.zarr.validate / cellmap_utils.zarr.metadata modules. Requires
+# zarr>=3.1.1, so kept out of core deps for now.
 zarr3 = [
   "ome-zarr-models>=1.7",
 ]

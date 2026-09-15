@@ -10,6 +10,7 @@ def upsert_record_scene_tables(
     image_location: str,
     scene_data: dict = {},
     scene_to_image_data: dict = {},
+    dry_run: bool = False,
 ) -> Tuple[dict]:
     """This method upserts records into scene and scene_to_image table at the same time.
 
@@ -20,9 +21,17 @@ def upsert_record_scene_tables(
         image_location (str): provides value for location filter paramater for the image record
         scene_update (dict): custom data to upsert into "scene" table
         scene_to_image_update (dict): custom data to upsert in "scene_to_image" table
+        dry_run (bool, optional): if True, compute the records that would be
+            created/updated, but do not call Airtable's create/update. Since the
+            scene record links to the scene_to_image record's id, that link is
+            None in dry_run mode (no real record was created to link to).
+            Defaults to False.
 
     Returns:
-        Tuple[dict]: output records that were upserted
+        Tuple[dict]: output records that were upserted, in the same shape
+            returned by pyairtable (``{'id': ..., 'fields': ...}``). When
+            dry_run is True, no records are actually created/updated, so 'id'
+            is None in both.
     """
 
     # fetch a record from image table:
@@ -58,7 +67,11 @@ def upsert_record_scene_tables(
     )
 
     # add records to scene_to_image table
-    if existing_record_scene_to_image == None:
+    if dry_run:
+        action = "update" if existing_record_scene_to_image else "create"
+        print(f"[dry_run] would {action} scene_to_image record: {scene_to_image_insert}")
+        scene_to_image_ids[location] = {"id": None, "fields": scene_to_image_insert}
+    elif existing_record_scene_to_image == None:
         scene_to_image_ids[location] = scene_to_image_table.create(
             scene_to_image_insert
         )
@@ -88,7 +101,11 @@ def upsert_record_scene_tables(
     # update if input data for an upsert record exists
     scene_insert = {key: scene_data.get(key, val) for key, val in scene_insert.items()}
 
-    if existing_record_scene == None:
+    if dry_run:
+        action = "update" if existing_record_scene else "create"
+        print(f"[dry_run] would {action} scene record: {scene_insert}")
+        scene_ids[location] = {"id": None, "fields": scene_insert}
+    elif existing_record_scene == None:
         scene_ids[location] = scene_table.create(scene_insert)
     else:
         scene_ids[location] = scene_table.update(

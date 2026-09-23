@@ -36,6 +36,28 @@ def _read_multiscale_group(image_path: str) -> Tuple[zarr.Group, str]:
     return zarr.open_group(group_path, mode="r"), array_name
 
 
+def _is_s3(path: str) -> bool:
+    return path.startswith("s3://")
+
+
+def _path_exists(path: str) -> bool:
+    """Check whether a copy of the image is present at ``path``.
+
+    Args:
+        path (str): a filesystem path, or an ``s3://`` path.
+
+    Returns:
+        bool: True if something is present at ``path``.
+    """
+    if _is_s3(path):
+        import fsspec
+
+        fs, _, paths = fsspec.get_fs_token_paths(path)
+        return fs.exists(paths[0])
+
+    return os.path.exists(path)
+
+
 def upsert_image(
     at_api: api,
     ds_name: str,

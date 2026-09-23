@@ -21,7 +21,7 @@ from .zarr import (
     validate_ome,
     validate_roi_offset,
 )
-from .airtable.upsert import upsert_image, upsert_record_scene_tables
+from .airtable.upsert import upsert_image, upsert_record_scene_tables, upsert_doi
 
 from .image import get_contrast_values
 
@@ -35,6 +35,7 @@ __all__ = [
     "repair_zarr_branch",
     "upsert_image",
     "upsert_record_scene_tables",
+    "upsert_doi",
     "get_image_record",
     "get_img_acq_record",
     "get_sample_record",

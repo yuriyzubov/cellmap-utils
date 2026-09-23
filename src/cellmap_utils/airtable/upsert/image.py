@@ -62,20 +62,28 @@ def upsert_image(
     at_api: api,
     ds_name: str,
     image_name: str,
-    image_path: str,
+    image_path: str | None,
     image_title: str,
     image_type: Literal["human_segmentation", "em"],
     institution: str = "HHMI / Janelia Research Campus",
     challenge : bool = False,
     dry_run : bool = False,
+    image_path_s3: str | None = None,
 ) -> dict:
     """Upsert a record to airtable image table.
+
+    An image can have a filesystem copy, an S3 copy, or both. Each copy that is
+    present gets its own field: ``location`` for the filesystem copy, and
+    ``location_s3`` for the S3 copy. A copy that is absent leaves its field
+    unset. The array metadata comes from the filesystem copy when it exists,
+    because that copy reads faster.
 
     Args:
         image_table (api.table.Table): image airtable object to create references.
         ds_name (str): name of the dataset.
         image_name (str): name of the image to upsert.
-        image_path (str): image location.
+        image_path (str | None): filesystem path of the image. Pass None if the
+            image has no filesystem copy. An ``s3://`` path is not accepted here.
         image_title (str): image title on openorganelle.com.
         image_type (Literal[&#39;human_segmentation&#39;, &#39;em&#39;]): image type
         collection_table (api.table.Table): collation airtable object to create references.
@@ -84,8 +92,12 @@ def upsert_image(
         dry_run (bool, optional): if True, compute the record that would be
             created/updated, but do not call Airtable's create/update. Defaults
             to False.
+        image_path_s3 (str | None, optional): ``s3://`` path of the image. Pass
+            None if the image has no S3 copy. Defaults to None.
 
     Raises:
+        ValueError: raise value error if image_path holds an s3:// path.
+        ValueError: raise value error if neither path holds a copy of the image.
         ValueError: raise value error if multiple records with the same location and name are found in the image table.
 
     Returns:
@@ -93,6 +105,30 @@ def upsert_image(
             pyairtable (``{'id': ..., 'fields': ...}``). When dry_run is True, no
             record is actually created/updated, so 'id' is None.
     """
+
+    if image_path is not None and _is_s3(image_path):
+        raise ValueError(
+            "image_path must be a filesystem path. "
+            "Pass an s3:// path in image_path_s3."
+        )
+
+    if image_path is None and image_path_s3 is None:
+        raise ValueError("Pass image_path, image_path_s3, or both.")
+
+    locations = {}
+    for field, path in (("location", image_path), ("location_s3", image_path_s3)):
+        if path is None:
+            continue
+        path = path.rstrip("/")
+        if _path_exists(path):
+            locations[field] = path
+        else:
+            print(f"No copy found at {path}")
+
+    if not locations:
+        raise ValueError("No copy found at the given paths.")
+
+    metadata_path = locations.get("location", locations.get("location_s3"))
 
     image_table = at_api.table(
         os.environ["AIRTABLE_BASE_ID"], os.environ["IMAGE_TABLE_ID"]
@@ -110,16 +146,21 @@ def upsert_image(
         os.environ["AIRTABLE_BASE_ID"], os.environ["INSTITUTION_TABLE_ID"]
     )
 
-    existing_records = image_table.all(
-        formula=match({"name": image_name, "location": image_path.rstrip("/")})
-    )
+    # a record already in airtable can carry only one of the two locations
+    existing_records = []
+    seen_ids = set()
+    for field, path in locations.items():
+        for record in image_table.all(formula=match({"name": image_name, field: path})):
+            if record["id"] not in seen_ids:
+                seen_ids.add(record["id"])
+                existing_records.append(record)
 
     if image_type in ["human_segmentation", "ml_segmentation"]:
         value_type = "label"
     else:
         value_type = "scalar"
 
-    zg, z_arr_name = _read_multiscale_group(image_path.rstrip("/"))
+    zg, z_arr_name = _read_multiscale_group(metadata_path)
     scale, offset = get_s0_level(zg)
     shape = zg[z_arr_name].shape
 
@@ -138,7 +179,7 @@ def upsert_image(
     record_to_upsert = {
         "name": image_name,
         "collection": [collection_table.all(formula=match({"id": ds_name}))[0]["id"]],
-        "location": image_path.rstrip("/"),
+        **locations,
         "format": "zarr",
         "title": image_title,
         "institution": [

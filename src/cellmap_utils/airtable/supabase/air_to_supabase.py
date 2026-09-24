@@ -1,6 +1,7 @@
 from pyairtable import api
 
 # from dotenv import load_dotenv
+import json
 import os
 from pyairtable.formulas import match
 from datetime import datetime
@@ -145,6 +146,21 @@ def _mesh_name(mesh_path: str) -> str:
     raise ValueError(
         f"mesh path holds neither 'segmentations' nor 'groundtruth': {mesh_path}"
     )
+
+
+def _read_mesh_info(mesh_path: str) -> dict:
+    """Read the neuroglancer "info" file that sits in the mesh folder.
+
+    Args:
+        mesh_path (str): path of the neuroglancer mesh volume.
+
+    Returns:
+        dict: the parsed info file.
+    """
+    import fsspec
+
+    with fsspec.open(f"{mesh_path.rstrip('/')}/info") as f:
+        return json.load(f)
 
 
 def get_img_acq_record(ds_name: str, at_api: api):

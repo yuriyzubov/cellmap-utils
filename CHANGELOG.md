@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.35] - 2026-09-24
+
+### 🎉 New Features
+- **Airtable**: Added `upsert_doi()`, which upserts a record in the `doi`
+  table and links it to an image record. Finds the image by its storage
+  path, fills the dataset name, and links the related records. Supports
+  `dry_run`.
+- **Supabase Integration**: Added `get_mesh_record()` and `SupaMeshModel`,
+  which build a Supabase record for a neuroglancer precomputed mesh volume.
+  The grid scale and shift come from the mesh metadata rather than a fixed
+  value.
+
+### 🔧 Enhanced Features
+- **Airtable**: `upsert_image()` accepts `image_path_s3`, so an image can
+  have a filesystem copy, an S3 copy, or both. Each copy that is present
+  fills its own location field; a copy that is absent leaves its field
+  unset. Array metadata is read from the filesystem copy when it exists.
+
+### 🧪 Testing / CI
+- Added 30 tests covering `upsert_doi()`, the S3 paths in `upsert_image()`,
+  and the mesh helpers. The suite is now 65 tests.
+
+### 📦 Package Management
+- Exported `upsert_doi` and `get_mesh_record` at the package level.
+- Documented the new functions on the airtable page, and added the doi
+  module to the API reference.
+- Version bump from 0.0.34 to 0.0.35.
+
 ## [0.0.34] - 2026-09-15
 
 ### 🎉 New Features

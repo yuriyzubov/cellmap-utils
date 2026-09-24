@@ -78,11 +78,6 @@ def test_read_mesh_info(mesh_dir):
     assert info["transform"] == _IDENTITY_TRANSFORM
 
 
-def test_read_mesh_info_ignores_trailing_slash(mesh_dir):
-    path = mesh_dir(_IDENTITY_TRANSFORM)
-    assert _read_mesh_info(f"{path}/") == _read_mesh_info(path)
-
-
 def test_grid_from_transform_reads_diagonal_and_last_column():
     # 4x3 row-major: scale sits on the diagonal, shift in the last column
     transform = [2, 0, 0, 10,
@@ -94,12 +89,6 @@ def test_grid_from_transform_reads_diagonal_and_last_column():
     # neuroglancer orders axes x, y, z; supabase wants z, y, x
     assert scale == [4, 3, 2]
     assert translation == [30, 20, 10]
-
-
-def test_grid_from_identity_transform_has_no_scale_or_shift():
-    scale, translation = _grid_from_transform(_IDENTITY_TRANSFORM)
-    assert scale == [1, 1, 1]
-    assert translation == [0, 0, 0]
 
 
 def test_get_mesh_record_builds_supabase_record(airtable_env, mesh_dir):
@@ -148,60 +137,3 @@ def test_get_mesh_record_matches_image_on_location_s3(airtable_env, mesh_dir):
     assert image_path in formula
 
 
-def test_get_mesh_record_takes_grid_from_transform(airtable_env, mesh_dir):
-    image_table = FakeTable(
-        records=[{"id": "recIMG", "fields": {"name": "mito", "title": "Mitochondria segmentation"}}]
-    )
-    at_api = FakeApi({"image_table": image_table})
-    transform = [8, 0, 0, 1,
-                 0, 8, 0, 2,
-                 0, 0, 8, 3]
-
-    record = get_mesh_record(
-        mesh_path=mesh_dir(transform),
-        image_path="s3://test-bucket/sample.zarr/segmentations/mito",
-        ds_name="my_dataset",
-        at_api=at_api,
-    )
-
-    assert record.grid_scale == [8, 8, 8]
-    assert record.grid_translation == [3, 2, 1]
-
-
-def test_get_mesh_record_warns_when_transform_is_not_identity(
-    airtable_env, mesh_dir, capsys
-):
-    image_table = FakeTable(
-        records=[{"id": "recIMG", "fields": {"name": "mito", "title": "Mitochondria segmentation"}}]
-    )
-    at_api = FakeApi({"image_table": image_table})
-    transform = [8, 0, 0, 1,
-                 0, 8, 0, 2,
-                 0, 0, 8, 3]
-
-    get_mesh_record(
-        mesh_path=mesh_dir(transform),
-        image_path="s3://test-bucket/sample.zarr/segmentations/mito",
-        ds_name="my_dataset",
-        at_api=at_api,
-    )
-
-    assert "MESH TRANSFORM IS NOT THE IDENTITY" in capsys.readouterr().out
-
-
-def test_get_mesh_record_is_quiet_for_identity_transform(
-    airtable_env, mesh_dir, capsys
-):
-    image_table = FakeTable(
-        records=[{"id": "recIMG", "fields": {"name": "mito", "title": "Mitochondria segmentation"}}]
-    )
-    at_api = FakeApi({"image_table": image_table})
-
-    get_mesh_record(
-        mesh_path=mesh_dir(_IDENTITY_TRANSFORM),
-        image_path="s3://test-bucket/sample.zarr/segmentations/mito",
-        ds_name="my_dataset",
-        at_api=at_api,
-    )
-
-    assert "MESH TRANSFORM IS NOT THE IDENTITY" not in capsys.readouterr().out

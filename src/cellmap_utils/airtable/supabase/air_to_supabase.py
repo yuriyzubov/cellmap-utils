@@ -163,6 +163,24 @@ def _read_mesh_info(mesh_path: str) -> dict:
         return json.load(f)
 
 
+def _grid_from_transform(transform: list[float]):
+    """Take the scale and the shift out of a neuroglancer transform.
+
+    The transform is a 4x3 homogeneous matrix in row-major order. It maps the
+    mesh coordinates to the model space of the image. Neuroglancer orders the
+    axes x, y, z, so this function reverses them to z, y, x.
+
+    Args:
+        transform (list[float]): the 12 numbers of the transform field.
+
+    Returns:
+        tuple[list[float], list[float]]: the scale and the shift, in z, y, x order.
+    """
+    scale_xyz = [transform[0], transform[5], transform[10]]
+    translation_xyz = [transform[3], transform[7], transform[11]]
+    return scale_xyz[::-1], translation_xyz[::-1]
+
+
 def get_img_acq_record(ds_name: str, at_api: api):
 
     fibsem_table = at_api.table(

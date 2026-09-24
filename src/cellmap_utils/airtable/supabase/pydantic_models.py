@@ -22,6 +22,25 @@ class SupaImageModel(BaseModel):
     doi: dict | None
 
 
+class SupaMeshModel(BaseModel):
+    name: str
+    description: str
+    url: str
+    format: str
+    ids: list[int]
+    source: dict | None
+    grid_dims: list[str]
+    grid_scale: list[float]
+    grid_translation: list[float]
+    grid_units: list[str]
+    grid_index_order: str
+    stage: str
+    # the mesh table holds image_id, which supabase assigns. These two name the
+    # image row instead, so the loader can look the id up.
+    dataset_name: str
+    image_name: str
+
+
 class SupaImageAcquisitionModel(BaseModel):
     name: str
     institution: str

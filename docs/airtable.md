@@ -51,6 +51,22 @@ The function fills `dataset` (as `"{collection id} {image title}"`), and links
 Segmentation crops (`image_type` `"human_segmentation"`) belong in the
 separate `doi_crop` table, so `upsert_doi()` rejects them.
 
+## Supabase Records
+
+`get_mesh_record()` reads a neuroglancer precomputed mesh volume and its
+Airtable image record, and returns a `SupaMeshModel`:
+
+```python
+from cellmap_utils import get_mesh_record
+
+mesh = get_mesh_record(mesh_path, image_path, ds_name, at_api)
+```
+
+The grid scale and the grid shift come from the `transform` in the mesh `info`
+file, not from a fixed value. The image record is matched on its `location_s3`
+field. A mesh whose transform is not the identity prints a warning, because
+such a mesh does not sit on the image.
+
 ## Detailed API Reference
 
 For complete function documentation, see the [Airtable API Reference](api/api_airtable.md).

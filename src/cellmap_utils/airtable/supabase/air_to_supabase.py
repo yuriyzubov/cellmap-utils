@@ -10,6 +10,7 @@ from .pydantic_models import (
     SupaDatasetModel,
     SupaImageAcquisitionModel,
     SupaImageModel,
+    SupaMeshModel,
     SupaPublicationModel,
     SupaSampleModel,
 )
@@ -122,6 +123,12 @@ def get_image_record(image_path: str, ds_name: str, at_api: api):
     return supa_image
 
 
+# a 4x3 homogeneous matrix in row-major order, with no scale and no shift
+_IDENTITY_TRANSFORM = [1, 0, 0, 0,
+                       0, 1, 0, 0,
+                       0, 0, 1, 0]
+
+
 def _mesh_name(mesh_path: str) -> str:
     """Build the mesh name from the path it sits at.
 
@@ -179,6 +186,57 @@ def _grid_from_transform(transform: list[float]):
     scale_xyz = [transform[0], transform[5], transform[10]]
     translation_xyz = [transform[3], transform[7], transform[11]]
     return scale_xyz[::-1], translation_xyz[::-1]
+
+
+def get_mesh_record(mesh_path: str, image_path: str, ds_name: str, at_api: api):
+    """Read a neuroglancer mesh and its airtable image record, and return a supabase mesh record.
+
+    The grid scale and the grid shift come from the transform in the mesh info
+    file, not from a fixed value. A mesh that carries a transform other than the
+    identity prints a warning, because such a mesh does not sit on the image.
+
+    Args:
+        mesh_path (str): s3 path of the neuroglancer precomputed mesh volume.
+        image_path (str): s3 path of the image the mesh comes from. It must match
+            the location_s3 field of an airtable image record.
+        ds_name (str): name of the dataset.
+        at_api (api): airtable api instance.
+
+    Returns:
+        SupaMeshModel: the supabase mesh record.
+    """
+
+    image_table = at_api.table(
+        os.environ["AIRTABLE_BASE_ID"], os.environ["IMAGE_TABLE_ID"]
+    )
+    image_record = image_table.all(
+        formula=match({"location_s3": image_path.rstrip("/")})
+    )[0]
+
+    info = _read_mesh_info(mesh_path)
+    grid_scale, grid_translation = _grid_from_transform(info["transform"])
+
+    if info["transform"] != _IDENTITY_TRANSFORM:
+        print(f"MESH TRANSFORM IS NOT THE IDENTITY, {mesh_path}, {info['transform']}")
+
+    supa_mesh = SupaMeshModel(
+        name=_mesh_name(mesh_path),
+        description=image_record["fields"]["title"],
+        url=mesh_path.rstrip("/"),
+        format=info["@type"],
+        ids=[],
+        source=None,
+        grid_dims=["z", "y", "x"],
+        grid_scale=grid_scale,
+        grid_translation=grid_translation,
+        grid_units=["nm", "nm", "nm"],
+        grid_index_order="C",
+        stage="dev",
+        dataset_name=ds_name,
+        image_name=image_record["fields"]["name"],
+    )
+
+    return supa_mesh
 
 
 def get_img_acq_record(ds_name: str, at_api: api):

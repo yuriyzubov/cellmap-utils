@@ -154,7 +154,7 @@ def test_upsert_image_dry_run_does_not_write(airtable_env, image_group_path):
     assert len(image_table.updated) == 0
 
 
-S3_PATH = "s3://janelia-cosem-datasets/ds/ds.zarr/recon-1/em/fibsem-uint8"
+S3_PATH = "s3://test-bucket/sample.zarr/image"
 
 
 @pytest.fixture
@@ -173,7 +173,7 @@ def fake_tables():
 
 def test_is_s3():
     assert _is_s3("s3://bucket/key") is True
-    assert _is_s3("/nrs/cellmap/data/ds.zarr") is False
+    assert _is_s3("/data/sample.zarr") is False
 
 
 def test_path_exists_on_filesystem(tmp_path):

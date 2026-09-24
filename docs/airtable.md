@@ -29,7 +29,7 @@ upsert_image(at_api, ds_name, image_name, image_path, image_title, image_type)
 
 # Record both a filesystem copy and an S3 copy of the same image
 upsert_image(at_api, ds_name, image_name, image_path, image_title, image_type,
-             image_path_s3="s3://janelia-cosem-datasets/...")
+             image_path_s3="s3://my-bucket/sample.zarr/image")
 
 # Upsert a doi record, linked to the image at this path
 upsert_doi(at_api, image_path, "refined nucleus segmentations")

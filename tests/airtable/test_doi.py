@@ -4,7 +4,7 @@ import pytest
 
 from cellmap_utils.airtable.upsert.doi import upsert_doi
 
-IMAGE_PATH = "/nrs/test/jrc_test.zarr/recon-1/labels/inference/segmentations/nuc"
+IMAGE_PATH = "/data/sample.zarr/segmentations/nuc"
 
 
 class FakeTable:
@@ -65,7 +65,7 @@ def make_image_record(**overrides):
         "fields": {
             "name": "nuc",
             # the image table's primary field, not the same as "name"
-            "collection/name": "jrc_test/nuc",
+            "collection/name": "test_ds/nuc",
             "title": "Nucleus segmentation",
             "image_type": "ml_segmentation",
             "collection": ["recCOLLECTION"],
@@ -78,14 +78,14 @@ def make_image_record(**overrides):
 
 COLLECTION_RECORD = {
     "id": "recCOLLECTION",
-    "fields": {"id": "jrc_test", "sample": ["recSAMPLE"]},
+    "fields": {"id": "test_ds", "sample": ["recSAMPLE"]},
 }
 
 
 def build_api(image_record=None, doi_records=None, collection_record=None):
     image_record = image_record if image_record is not None else make_image_record()
     image_table = FakeTable(matches=[("{location}", [image_record])])
-    doi_table = FakeTable(matches=[("jrc_test/nuc", doi_records or [])])
+    doi_table = FakeTable(matches=[("test_ds/nuc", doi_records or [])])
     collection_table = FakeTable(
         get_record=collection_record if collection_record is not None else COLLECTION_RECORD
     )
@@ -106,7 +106,7 @@ def test_upsert_doi_creates_record(airtable_env):
     fields = result["fields"]
     assert fields["image"] == ["recIMG"]
     assert fields["doi_name"] == "refined nucleus segmentations"
-    assert fields["dataset"] == "jrc_test Nucleus segmentation"
+    assert fields["dataset"] == "test_ds Nucleus segmentation"
     assert fields["collection"] == ["recCOLLECTION"]
     assert fields["sample"] == ["recSAMPLE"]
     assert len(tables["doi_table"].created) == 1
@@ -136,7 +136,7 @@ def test_upsert_doi_narrows_doi_lookup_on_image_primary_field(airtable_env):
     upsert_doi(at_api, IMAGE_PATH, "refined nucleus segmentations")
 
     doi_formula = tables["doi_table"].formulas[0]
-    assert "jrc_test/nuc" in doi_formula
+    assert "test_ds/nuc" in doi_formula
     # the record was found, so this is an update rather than a duplicate
     assert len(tables["doi_table"].updated) == 1
 
@@ -153,10 +153,10 @@ def test_upsert_doi_ignores_doi_record_linked_to_another_image(airtable_env):
 
 
 def test_upsert_doi_falls_back_to_location_s3(airtable_env):
-    s3_path = "s3://bucket/jrc_test.zarr/recon-1/labels/inference/segmentations/nuc"
+    s3_path = "s3://test-bucket/sample.zarr/segmentations/nuc"
     image_record = make_image_record(location_s3=s3_path)
     image_table = FakeTable(matches=[("{location_s3}", [image_record])])
-    doi_table = FakeTable(matches=[("jrc_test/nuc", [])])
+    doi_table = FakeTable(matches=[("test_ds/nuc", [])])
     collection_table = FakeTable(get_record=COLLECTION_RECORD)
     at_api = FakeApi(
         {
@@ -188,7 +188,7 @@ def test_upsert_doi_dry_run_does_not_write(airtable_env):
     result = upsert_doi(at_api, IMAGE_PATH, "refined nucleus segmentations", dry_run=True)
 
     assert result["id"] is None
-    assert result["fields"]["dataset"] == "jrc_test Nucleus segmentation"
+    assert result["fields"]["dataset"] == "test_ds Nucleus segmentation"
     assert len(tables["doi_table"].created) == 0
     assert len(tables["doi_table"].updated) == 0
 
@@ -247,7 +247,7 @@ def test_upsert_doi_omits_fibsem_imaging_for_derived_images(airtable_env):
 
 
 def test_upsert_doi_omits_sample_when_collection_has_none(airtable_env):
-    at_api, _ = build_api(collection_record={"id": "recCOLLECTION", "fields": {"id": "jrc_test"}})
+    at_api, _ = build_api(collection_record={"id": "recCOLLECTION", "fields": {"id": "test_ds"}})
 
     result = upsert_doi(at_api, IMAGE_PATH, "refined nucleus segmentations")
 

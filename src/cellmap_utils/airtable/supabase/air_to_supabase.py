@@ -121,6 +121,32 @@ def get_image_record(image_path: str, ds_name: str, at_api: api):
     return supa_image
 
 
+def _mesh_name(mesh_path: str) -> str:
+    """Build the mesh name from the path it sits at.
+
+    Args:
+        mesh_path (str): s3 path of the neuroglancer mesh volume.
+
+    Raises:
+        ValueError: raise value error if the path holds neither "segmentations"
+            nor "groundtruth", because then the name is not known.
+
+    Returns:
+        str: "{organelle}_seg" for a segmentation, "{organelle}_gt" for ground truth.
+    """
+    parts = mesh_path.rstrip("/").split("/")
+    organelle = parts[-1]
+
+    if "segmentations" in parts:
+        return f"{organelle}_seg"
+    if "groundtruth" in parts:
+        return f"{organelle}_gt"
+
+    raise ValueError(
+        f"mesh path holds neither 'segmentations' nor 'groundtruth': {mesh_path}"
+    )
+
+
 def get_img_acq_record(ds_name: str, at_api: api):
 
     fibsem_table = at_api.table(

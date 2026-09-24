@@ -17,8 +17,8 @@ def upsert_doi(
     here.
 
     The doi record's ``dataset`` field is set to ``"{collection id} {image
-    title}"`` (e.g. "jrc_mosquito-stylet-6 Nucleus segmentation"), matching the
-    naming convention already used for other doi records. The image's linked
+    title}"``, matching the naming convention already used for other doi
+    records. The image's linked
     collection record is also set on the doi record's ``collection`` field,
     which drives several of the doi table's lookup fields. The collection's
     linked sample record, if any, is set on the doi record's ``sample`` field.
@@ -32,8 +32,8 @@ def upsert_doi(
         image_path (str): filesystem path or s3:// path of the image record to
             link to the doi record. The image record's ``location`` or
             ``location_s3`` field must hold this exact path. Plain image
-            names (e.g. "nuc") are not accepted here because many images
-            across different datasets share the same name.
+            names are not accepted here, because images in different
+            datasets often share the same name.
         doi_name (str): value for the doi record's doi_name field.
         dry_run (bool, optional): if True, compute the record that would be
             created/updated, but do not call Airtable's create/update. Defaults
@@ -82,9 +82,8 @@ def upsert_doi(
         )
 
     # narrow by the image table's primary field value first (cheap), then
-    # confirm by exact linked record id. A link field, when compared in a
-    # formula, resolves to the linked record's primary field ("collection/name"
-    # on the image table, e.g. "jrc_mosquito-stylet-6/nuc"), not its "name".
+    # confirm by exact linked record id, because a link field compares
+    # against the linked record's primary field rather than its name
     image_primary_value = image_record["fields"].get("collection/name", image_name)
     candidate_records = doi_table.all(formula=match({"image": image_primary_value}))
     existing_records = [

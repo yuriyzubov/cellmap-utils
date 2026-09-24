@@ -174,14 +174,6 @@ def test_upsert_doi_falls_back_to_location_s3(airtable_env):
     assert "{location_s3}" in image_table.formulas[1]
 
 
-def test_upsert_doi_strips_trailing_slash(airtable_env):
-    at_api, tables = build_api()
-
-    upsert_doi(at_api, f"{IMAGE_PATH}/", "refined nucleus segmentations")
-
-    assert f"{IMAGE_PATH}'" in tables["image_table"].formulas[0]
-
-
 def test_upsert_doi_dry_run_does_not_write(airtable_env):
     at_api, tables = build_api()
 

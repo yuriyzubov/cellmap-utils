@@ -42,7 +42,7 @@ def mesh_dir(tmp_path):
     """Build a mesh folder that holds a neuroglancer info file."""
 
     def _make(transform, kind="segmentations", organelle="mito"):
-        path = tmp_path / "labels" / "inference" / kind / organelle
+        path = tmp_path / kind / organelle
         path.mkdir(parents=True)
         info = {"@type": "neuroglancer_multilod_draco", "transform": transform}
         (path / "info").write_text(json.dumps(info))
@@ -52,23 +52,23 @@ def mesh_dir(tmp_path):
 
 
 def test_mesh_name_segmentation():
-    path = "s3://bucket/ds.zarr/recon-1/labels/inference/segmentations/mito"
+    path = "s3://test-bucket/sample.zarr/segmentations/mito"
     assert _mesh_name(path) == "mito_seg"
 
 
 def test_mesh_name_groundtruth():
-    path = "s3://bucket/ds.zarr/recon-1/labels/groundtruth/mito"
+    path = "s3://test-bucket/sample.zarr/groundtruth/mito"
     assert _mesh_name(path) == "mito_gt"
 
 
 def test_mesh_name_ignores_trailing_slash():
-    path = "s3://bucket/ds.zarr/recon-1/labels/inference/segmentations/nuc/"
+    path = "s3://test-bucket/sample.zarr/segmentations/nuc/"
     assert _mesh_name(path) == "nuc_seg"
 
 
 def test_mesh_name_rejects_unknown_path():
     with pytest.raises(ValueError, match="segmentations"):
-        _mesh_name("s3://bucket/ds.zarr/recon-1/em/fibsem-uint8")
+        _mesh_name("s3://test-bucket/sample.zarr/image")
 
 
 def test_read_mesh_info(mesh_dir):
@@ -111,7 +111,7 @@ def test_get_mesh_record_builds_supabase_record(airtable_env, mesh_dir):
 
     record = get_mesh_record(
         mesh_path=mesh_path,
-        image_path="s3://bucket/ds.zarr/recon-1/labels/inference/segmentations/mito",
+        image_path="s3://test-bucket/sample.zarr/segmentations/mito",
         ds_name="my_dataset",
         at_api=at_api,
     )
@@ -129,7 +129,7 @@ def test_get_mesh_record_builds_supabase_record(airtable_env, mesh_dir):
 
 
 def test_get_mesh_record_matches_image_on_location_s3(airtable_env, mesh_dir):
-    image_path = "s3://bucket/ds.zarr/recon-1/labels/inference/segmentations/mito"
+    image_path = "s3://test-bucket/sample.zarr/segmentations/mito"
     image_table = FakeTable(
         records=[{"id": "recIMG", "fields": {"name": "mito", "title": "Mitochondria segmentation"}}]
     )
@@ -159,7 +159,7 @@ def test_get_mesh_record_takes_grid_from_transform(airtable_env, mesh_dir):
 
     record = get_mesh_record(
         mesh_path=mesh_dir(transform),
-        image_path="s3://bucket/ds.zarr/recon-1/labels/inference/segmentations/mito",
+        image_path="s3://test-bucket/sample.zarr/segmentations/mito",
         ds_name="my_dataset",
         at_api=at_api,
     )
@@ -181,7 +181,7 @@ def test_get_mesh_record_warns_when_transform_is_not_identity(
 
     get_mesh_record(
         mesh_path=mesh_dir(transform),
-        image_path="s3://bucket/ds.zarr/recon-1/labels/inference/segmentations/mito",
+        image_path="s3://test-bucket/sample.zarr/segmentations/mito",
         ds_name="my_dataset",
         at_api=at_api,
     )
@@ -199,7 +199,7 @@ def test_get_mesh_record_is_quiet_for_identity_transform(
 
     get_mesh_record(
         mesh_path=mesh_dir(_IDENTITY_TRANSFORM),
-        image_path="s3://bucket/ds.zarr/recon-1/labels/inference/segmentations/mito",
+        image_path="s3://test-bucket/sample.zarr/segmentations/mito",
         ds_name="my_dataset",
         at_api=at_api,
     )
